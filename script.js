@@ -263,7 +263,6 @@
                 <option value="caesar">Caesar Cipher</option>
                 <option value="des">DES</option>
                 <option value="rsa">RSA</option>
-                <option value="blowfish" disabled>Blowfish (Coming Soon)</option>
               </select>
             </div>
           </div>
@@ -816,9 +815,6 @@
                 return "ERROR: RSA encryption failed: " + e.message;
               }
               break;
-            case "blowfish":
-              result = btoa(text) + ".BLOWFISH";
-              break;
             case "caesar":
               // Validate Caesar cipher key
               const shift = parseInt(key);
@@ -897,7 +893,7 @@
             } else {
               // Remove the algorithm suffix if present
               let cleanText = text;
-              [".AES256", ".DES", ".RSA", ".BLOWFISH"].forEach((suffix) => {
+              [".AES256", ".DES", ".RSA"].forEach((suffix) => {
                 cleanText = cleanText.replace(suffix, "");
               });
               result = atob(cleanText);
@@ -1029,9 +1025,6 @@
                 break;
               case "rsa":
                 encryptionKey.placeholder = "Enter RSA private/public key...";
-                break;
-              case "blowfish":
-                encryptionKey.placeholder = "Enter Blowfish key...";
                 break;
               case "caesar":
                 encryptionKey.placeholder = "Enter shift value (0-25)...";
