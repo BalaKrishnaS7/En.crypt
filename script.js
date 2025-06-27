@@ -262,7 +262,7 @@
                 <option value="aes">AES-256</option>
                 <option value="caesar">Caesar Cipher</option>
                 <option value="des">DES</option>
-                <option value="rsa" disabled>RSA (Coming Soon)</option>
+                <option value="rsa">RSA</option>
                 <option value="blowfish" disabled>Blowfish (Coming Soon)</option>
               </select>
             </div>
@@ -631,8 +631,159 @@
           }
         }
 
-        // Create DES instance
+        // RSA Algorithm Implementation (Simplified for demonstration)
+        class RSA {
+          constructor() {
+            // Pre-computed small prime numbers for demo purposes
+            this.primes = [
+              61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983, 991, 997
+            ];
+          }
+
+          // Generate RSA key pair based on a password/seed
+          generateKeyPair(password) {
+            // Use password to seed the random selection of primes
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+              hash = ((hash << 5) - hash + password.charCodeAt(i)) & 0xffffffff;
+            }
+
+            // Select two different primes based on the hash
+            const index1 = Math.abs(hash) % this.primes.length;
+            const index2 = Math.abs(hash >> 8) % this.primes.length;
+            
+            let p = this.primes[index1];
+            let q = this.primes[index2 !== index1 ? index2 : (index2 + 1) % this.primes.length];
+
+            // Ensure p and q are different
+            if (p === q) {
+              q = this.primes[(index2 + 1) % this.primes.length];
+            }
+
+            const n = p * q;
+            const phi = (p - 1) * (q - 1);
+
+            // Choose e (public exponent) - commonly 65537, but we'll use 65 for simplicity
+            let e = 65;
+            while (this.gcd(e, phi) !== 1) {
+              e++;
+            }
+
+            // Calculate d (private exponent)
+            const d = this.modInverse(e, phi);
+
+            return {
+              publicKey: { n, e },
+              privateKey: { n, d },
+              p, q, phi // For demonstration purposes
+            };
+          }
+
+          // Greatest Common Divisor
+          gcd(a, b) {
+            while (b !== 0) {
+              [a, b] = [b, a % b];
+            }
+            return a;
+          }
+
+          // Modular inverse using Extended Euclidean Algorithm
+          modInverse(a, m) {
+            if (this.gcd(a, m) !== 1) {
+              return null; // Modular inverse doesn't exist
+            }
+
+            let [m0, x0, x1] = [m, 0, 1];
+
+            while (a > 1) {
+              const q = Math.floor(a / m);
+              [m, a] = [a % m, m];
+              [x0, x1] = [x1 - q * x0, x0];
+            }
+
+            return x1 < 0 ? x1 + m0 : x1;
+          }
+
+          // Modular exponentiation
+          modPow(base, exponent, modulus) {
+            let result = 1;
+            base = base % modulus;
+
+            while (exponent > 0) {
+              if (exponent % 2 === 1) {
+                result = (result * base) % modulus;
+              }
+              exponent = Math.floor(exponent / 2);
+              base = (base * base) % modulus;
+            }
+
+            return result;
+          }
+
+          // Encrypt a single number
+          encryptNumber(number, publicKey) {
+            return this.modPow(number, publicKey.e, publicKey.n);
+          }
+
+          // Decrypt a single number
+          decryptNumber(number, privateKey) {
+            return this.modPow(number, privateKey.d, privateKey.n);
+          }
+
+          // Encrypt text
+          encrypt(plaintext, password) {
+            const keyPair = this.generateKeyPair(password);
+            const encrypted = [];
+
+            for (let i = 0; i < plaintext.length; i++) {
+              const charCode = plaintext.charCodeAt(i);
+              
+              // Ensure the character code is less than n
+              if (charCode >= keyPair.publicKey.n) {
+                throw new Error(`Character '${plaintext[i]}' (code: ${charCode}) is too large for RSA modulus ${keyPair.publicKey.n}`);
+              }
+              
+              const encryptedChar = this.encryptNumber(charCode, keyPair.publicKey);
+              encrypted.push(encryptedChar);
+            }
+
+            // Store the key information with the encrypted data
+            const result = {
+              data: encrypted,
+              n: keyPair.publicKey.n,
+              e: keyPair.publicKey.e
+            };
+
+            return btoa(JSON.stringify(result));
+          }
+
+          // Decrypt text
+          decrypt(ciphertext, password) {
+            try {
+              const parsed = JSON.parse(atob(ciphertext));
+              const keyPair = this.generateKeyPair(password);
+
+              // Verify that the key pair matches
+              if (parsed.n !== keyPair.publicKey.n || parsed.e !== keyPair.publicKey.e) {
+                throw new Error("Wrong password - key mismatch");
+              }
+
+              let decrypted = "";
+              for (let i = 0; i < parsed.data.length; i++) {
+                const decryptedChar = this.decryptNumber(parsed.data[i], keyPair.privateKey);
+                decrypted += String.fromCharCode(decryptedChar);
+              }
+
+              return decrypted;
+            } catch (e) {
+              throw new Error(`Decryption failed: ${e.message}`);
+            }
+          }
+        }
+
+        // Create DES and RSA instances
         const des = new DES();
+        const rsa = new RSA();
 
         // Modified mockEncrypt function with Caesar cipher validation
         function mockEncrypt(text, algorithm, key) {
@@ -656,7 +807,14 @@
               }
               break;
             case "rsa":
-              result = btoa(text) + ".RSA";
+              try {
+                if (key.length < 4) {
+                  return "ERROR: RSA key must be at least 4 characters for security";
+                }
+                result = rsa.encrypt(text, key) + ".RSA";
+              } catch (e) {
+                return "ERROR: RSA encryption failed: " + e.message;
+              }
               break;
             case "blowfish":
               result = btoa(text) + ".BLOWFISH";
@@ -729,6 +887,13 @@
               }
               const cleanText = text.replace(".DES", "");
               result = des.decrypt(cleanText, key);
+            } else if (algorithm === "rsa") {
+              // RSA decryption
+              if (key.length < 4) {
+                return "ERROR: RSA key must be at least 4 characters for security";
+              }
+              const cleanText = text.replace(".RSA", "");
+              result = rsa.decrypt(cleanText, key);
             } else {
               // Remove the algorithm suffix if present
               let cleanText = text;
@@ -740,6 +905,8 @@
           } catch (e) {
             if (algorithm === "des") {
               return "ERROR: DES decryption failed - " + e.message;
+            } else if (algorithm === "rsa") {
+              return "ERROR: RSA decryption failed - " + e.message;
             }
             return "ERROR: Invalid input format or corrupted data";
           }
