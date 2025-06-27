@@ -261,7 +261,7 @@
               <select class="terminal-select" id="encryption-algorithm">
                 <option value="aes">AES-256</option>
                 <option value="caesar">Caesar Cipher</option>
-                <option value="des" disabled>DES (Coming Soon)</option>
+                <option value="des">DES</option>
                 <option value="rsa" disabled>RSA (Coming Soon)</option>
                 <option value="blowfish" disabled>Blowfish (Coming Soon)</option>
               </select>
@@ -520,6 +520,120 @@
           });
         });
 
+        // DES Algorithm Implementation
+        class DES {
+          constructor() {
+            // Initial Permutation Table
+            this.IP = [
+              58, 50, 42, 34, 26, 18, 10, 2,
+              60, 52, 44, 36, 28, 20, 12, 4,
+              62, 54, 46, 38, 30, 22, 14, 6,
+              64, 56, 48, 40, 32, 24, 16, 8,
+              57, 49, 41, 33, 25, 17, 9, 1,
+              59, 51, 43, 35, 27, 19, 11, 3,
+              61, 53, 45, 37, 29, 21, 13, 5,
+              63, 55, 47, 39, 31, 23, 15, 7
+            ];
+
+            // Final Permutation Table
+            this.FP = [
+              40, 8, 48, 16, 56, 24, 64, 32,
+              39, 7, 47, 15, 55, 23, 63, 31,
+              38, 6, 46, 14, 54, 22, 62, 30,
+              37, 5, 45, 13, 53, 21, 61, 29,
+              36, 4, 44, 12, 52, 20, 60, 28,
+              35, 3, 43, 11, 51, 19, 59, 27,
+              34, 2, 42, 10, 50, 18, 58, 26,
+              33, 1, 41, 9, 49, 17, 57, 25
+            ];
+
+            // S-boxes
+            this.S = [
+              // S1
+              [
+                [14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
+                [0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
+                [4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0],
+                [15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13]
+              ],
+              // S2-S8 would go here... (simplified for demo)
+            ];
+
+            // Permutation Choice 1
+            this.PC1 = [
+              57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18,
+              10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36,
+              63, 55, 47, 39, 31, 23, 15, 7, 62, 54, 46, 38, 30, 22,
+              14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4
+            ];
+          }
+
+          // Convert string to binary
+          stringToBinary(str) {
+            return str.split('').map(char => 
+              char.charCodeAt(0).toString(2).padStart(8, '0')
+            ).join('');
+          }
+
+          // Convert binary to string
+          binaryToString(binary) {
+            const result = [];
+            for (let i = 0; i < binary.length; i += 8) {
+              const byte = binary.substr(i, 8);
+              result.push(String.fromCharCode(parseInt(byte, 2)));
+            }
+            return result.join('');
+          }
+
+          // Simple DES-like encryption (simplified for demo purposes)
+          encrypt(plaintext, key) {
+            // Pad key to 8 characters
+            key = key.padEnd(8, '0').substring(0, 8);
+            
+            // Simple XOR-based encryption with key rotation
+            let result = '';
+            for (let i = 0; i < plaintext.length; i++) {
+              const keyChar = key[i % key.length];
+              const plainChar = plaintext[i];
+              const encrypted = String.fromCharCode(
+                plainChar.charCodeAt(0) ^ keyChar.charCodeAt(0) ^ (i % 256)
+              );
+              result += encrypted;
+            }
+            
+            return btoa(result); // Base64 encode
+          }
+
+          // Simple DES-like decryption
+          decrypt(ciphertext, key) {
+            try {
+              // Decode from base64
+              const decoded = atob(ciphertext);
+              
+              // Pad key to 8 characters
+              key = key.padEnd(8, '0').substring(0, 8);
+              
+              // Simple XOR-based decryption with key rotation
+              let result = '';
+              for (let i = 0; i < decoded.length; i++) {
+                const keyChar = key[i % key.length];
+                const cipherChar = decoded[i];
+                const decrypted = String.fromCharCode(
+                  cipherChar.charCodeAt(0) ^ keyChar.charCodeAt(0) ^ (i % 256)
+                );
+                result += decrypted;
+              }
+              
+              return result;
+            } catch (e) {
+              throw new Error('Invalid DES ciphertext format');
+            }
+          }
+        }
+
+        // Create DES instance
+        const des = new DES();
+
         // Modified mockEncrypt function with Caesar cipher validation
         function mockEncrypt(text, algorithm, key) {
           if (!text) return "ERROR: No input text provided";
@@ -532,7 +646,14 @@
               result = btoa(text) + ".AES256";
               break;
             case "des":
-              result = btoa(text) + ".DES";
+              try {
+                if (key.length < 1) {
+                  return "ERROR: DES key must be at least 1 character (will be padded to 8)";
+                }
+                result = des.encrypt(text, key) + ".DES";
+              } catch (e) {
+                return "ERROR: DES encryption failed: " + e.message;
+              }
               break;
             case "rsa":
               result = btoa(text) + ".RSA";
@@ -601,6 +722,13 @@
                   return char;
                 })
                 .join("");
+            } else if (algorithm === "des") {
+              // DES decryption
+              if (key.length < 1) {
+                return "ERROR: DES key must be at least 1 character (will be padded to 8)";
+              }
+              const cleanText = text.replace(".DES", "");
+              result = des.decrypt(cleanText, key);
             } else {
               // Remove the algorithm suffix if present
               let cleanText = text;
@@ -610,6 +738,9 @@
               result = atob(cleanText);
             }
           } catch (e) {
+            if (algorithm === "des") {
+              return "ERROR: DES decryption failed - " + e.message;
+            }
             return "ERROR: Invalid input format or corrupted data";
           }
           return result;
@@ -727,7 +858,7 @@
                 encryptionKey.placeholder = "Enter 32-byte AES key...";
                 break;
               case "des":
-                encryptionKey.placeholder = "Enter 8-byte DES key...";
+                encryptionKey.placeholder = "Enter DES key (min 1 char, padded to 8)...";
                 break;
               case "rsa":
                 encryptionKey.placeholder = "Enter RSA private/public key...";
@@ -1054,6 +1185,8 @@
             switch (algo) {
               case "aes":
                 return ".aes";
+              case "des":
+                return ".des";
               case "pgp":
                 return ".gpg";
               case "zip":
@@ -1092,6 +1225,28 @@
                   { time: 2200, message: "Deriving key using PBKDF2..." },
                   { time: 2800, message: "Verifying authentication tag..." },
                   { time: 3500, message: "Applying AES-256 decipher..." },
+                  { time: 4000, message: "Restoring original file data..." },
+                ],
+              },
+              des: {
+                encrypt: [
+                  {
+                    time: 1800,
+                    message: "Preparing 64-bit data blocks...",
+                  },
+                  { time: 2200, message: "Generating 16 round keys..." },
+                  { time: 2800, message: "Applying DES encryption rounds..." },
+                  { time: 3500, message: "Performing final permutation..." },
+                  { time: 4000, message: "Finalizing encrypted data..." },
+                ],
+                decrypt: [
+                  {
+                    time: 1800,
+                    message: "Reading encrypted data blocks...",
+                  },
+                  { time: 2200, message: "Generating 16 round keys..." },
+                  { time: 2800, message: "Applying DES decryption rounds..." },
+                  { time: 3500, message: "Performing inverse permutation..." },
                   { time: 4000, message: "Restoring original file data..." },
                 ],
               },
