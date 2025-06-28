@@ -1376,13 +1376,6 @@
           }
         }
 
-        // Create DES, RSA, ZIP, PGP, and 7-Zip instances
-        const des = new DES();
-        const rsa = new RSA();
-        const zip = new ZIP();
-        const pgp = new PGP();
-        const sevenZip = new SevenZip();
-
         // Modified mockEncrypt function with Caesar cipher validation
         function mockEncrypt(text, algorithm, key) {
           if (!text) return "ERROR: No input text provided";
@@ -1991,6 +1984,7 @@
                     message: "Extracting initialization vector...",
                   },
                   { time: 2200, message: "Deriving key using PBKDF2..." },
+
                   { time: 2800, message: "Verifying authentication tag..." },
                   { time: 3500, message: "Applying AES-256 decipher..." },
                   { time: 4000, message: "Restoring original file data..." },
@@ -2804,12 +2798,100 @@ Ready to crack hashes.`;
               );
             }
 
+            // Performance optimization functions
+            function optimizeWordlist(wordlist, hashType) {
+              // Remove duplicates and empty entries
+              const uniqueWords = [...new Set(wordlist.filter(word => word.trim().length > 0))];
+              
+              // Sort by most common patterns first for better hit probability
+              const sortedWords = uniqueWords.sort((a, b) => {
+                // Prioritize common password patterns
+                const aScore = getPasswordScore(a);
+                const bScore = getPasswordScore(b);
+                return bScore - aScore;
+              });
+              
+              // For bcrypt, limit wordlist size to due computational cost
+              if (hashType === 'bcrypt' && sortedWords.length > 1000) {
+                statusLeft.innerHTML = `<span style="color: rgba(255, 165, 0, 0.9);">[*] Limited to top 1000 for bcrypt</span>`;
+                return sortedWords.slice(0, 1000);
+              }
+              
+              return sortedWords;
+            }
+            
+            function getPasswordScore(word) {
+              let score = 0;
+              
+              // Common password patterns get higher scores
+              const commonPatterns = [
+                /^password/i, /^admin/i, /^user/i, /^test/i, /^demo/i,
+                /123456/, /qwerty/i, /welcome/i, /login/i, /guest/i,
+                /^[0-9]{4,8}$/, // Common number patterns
+                /^[a-z]{4,8}$/, // Simple lowercase words
+              ];
+              
+              for (const pattern of commonPatterns) {
+                if (pattern.test(word)) score += 10;
+              }
+              
+              // Length-based scoring (shorter passwords are more common)
+              if (word.length <= 8) score += 5;
+              if (word.length <= 6) score += 3;
+              
+              return score;
+            }
+            
+            // Optimized hash generation with caching
+            const hashCache = new Map();
+            async function generateHashOptimized(message, algorithm) {
+              const cacheKey = `${algorithm}:${message}`;
+              
+              if (hashCache.has(cacheKey)) {
+                return hashCache.get(cacheKey);
+              }
+              
+              const hash = await generateHash(message, algorithm);
+              
+              // Limit cache size to prevent memory issues
+              if (hashCache.size > 10000) {
+                const firstKey = hashCache.keys().next().value;
+                hashCache.delete(firstKey);
+              }
+              
+              hashCache.set(cacheKey, hash);
+              return hash;
+            }
+            
+            // Batch processing with optimized timing
+            function getOptimizedBatchSize(hashType, wordsRemaining) {
+              const baseSizes = {
+                bcrypt: 3,    // Reduced for bcrypt
+                sha256: 25,   // Increased
+                ntlm: 50,     // Increased 
+                sha1: 35,     // Increased
+                md5: 60       // Increased
+              };
+              
+              let batchSize = baseSizes[hashType] || 40;
+              
+              // Reduce batch size if close to end to maintain responsiveness
+              if (wordsRemaining < batchSize) {
+                batchSize = Math.max(1, Math.floor(wordsRemaining / 2));
+              }
+              
+              return batchSize;
+            }
+
             async function startCracking(wordlist) {
+              // Performance optimization: Pre-filter and sort dictionary
+              const optimizedWordlist = optimizeWordlist(wordlist, type);
+              
               // Clear previous content and reset styles
               hashOutput.innerHTML = "";
               hashOutput.style.padding = "8px";
               hashOutput.style.height = "auto";
-              hashOutput.style.maxHeight = "180px"; // Increased max-height to use more available space
+              hashOutput.style.maxHeight = "180px";
 
               // Create a more compact UI with inline status bar
               const statusBar = document.createElement("div");
@@ -2825,7 +2907,7 @@ Ready to crack hashes.`;
               statusLeft.innerHTML = `<span style="color: rgba(255, 165, 0, 0.9);">[*] Cracking ${type.toUpperCase()}</span>`;
 
               const statusRight = document.createElement("div");
-              statusRight.innerHTML = `<span style="color: rgba(255, 165, 0, 0.8);">${wordlist.length.toLocaleString()} words</span>`;
+              statusRight.innerHTML = `<span style="color: rgba(255, 165, 0, 0.8);">${optimizedWordlist.length.toLocaleString()} words (optimized)</span>`;
 
               statusBar.appendChild(statusLeft);
               statusBar.appendChild(statusRight);
@@ -2833,32 +2915,57 @@ Ready to crack hashes.`;
               // Attempts area - optimized height
               const attemptsArea = document.createElement("div");
               attemptsArea.style.height = "auto";
-              attemptsArea.style.maxHeight = "145px"; // Allow more space for attempts
+              attemptsArea.style.maxHeight = "145px";
               attemptsArea.style.overflow = "hidden";
               attemptsArea.style.fontFamily = "monospace";
-              attemptsArea.style.fontSize = "10px"; // Smaller font
-              attemptsArea.style.lineHeight = "1.2"; // Tighter line spacing
+              attemptsArea.style.fontSize = "10px";
+              attemptsArea.style.lineHeight = "1.2";
 
               // Add to main output
               hashOutput.appendChild(statusBar);
               hashOutput.appendChild(attemptsArea);
 
-              // Cracking process variables
-              const totalWords = wordlist.length;
+              // Performance-optimized cracking process variables
+              const totalWords = optimizedWordlist.length;
               let checked = 0;
               let foundWord = null;
               let startTime = Date.now();
               let hashesPerSecond = 0;
               let lastUpdate = Date.now();
               let lastChecked = 0;
+              let isPaused = false;
+              let shouldStop = false;
+              let currentBatchSize = getOptimizedBatchSize(type, totalWords);
 
-              // Speed varies by hash type - slower for more complex algorithms
-              const batchSize = 
-                type === "bcrypt" ? 5 :      // Very slow due to intentional cost
-                type === "sha256" ? 15 : 
-                type === "ntlm" ? 35 :       // Faster than SHA but slower than MD5
-                type === "sha1" ? 25 : 
-                40;                          // MD5 is fastest
+              // Add pause/resume controls
+              const controlsDiv = document.createElement("div");
+              controlsDiv.style.display = "flex";
+              controlsDiv.style.gap = "8px";
+              controlsDiv.style.marginTop = "4px";
+              controlsDiv.style.fontSize = "10px";
+
+              const pauseBtn = document.createElement("button");
+              pauseBtn.textContent = "Pause";
+              pauseBtn.style.cssText = "background: rgba(255,165,0,0.2); border: 1px solid rgba(255,165,0,0.4); color: rgba(255,165,0,0.9); padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 9px;";
+              
+              const stopBtn = document.createElement("button");
+              stopBtn.textContent = "Stop";
+              stopBtn.style.cssText = "background: rgba(255,100,100,0.2); border: 1px solid rgba(255,100,100,0.4); color: rgba(255,100,100,0.9); padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 9px;";
+
+              pauseBtn.onclick = () => {
+                isPaused = !isPaused;
+                pauseBtn.textContent = isPaused ? "Resume" : "Pause";
+                if (!isPaused) processWords(); // Resume processing
+              };
+
+              stopBtn.onclick = () => {
+                shouldStop = true;
+                completeCracking(null);
+              };
+
+              controlsDiv.appendChild(pauseBtn);
+              controlsDiv.appendChild(stopBtn);
+              hashOutput.appendChild(controlsDiv);
 
               function updateStats() {
                 const now = Date.now();
@@ -2874,10 +2981,25 @@ Ready to crack hashes.`;
                     100,
                     (checked / totalWords) * 100
                   ).toFixed(1);
-                  statusRight.innerHTML = `<span style="color: rgba(255, 165, 0, 0.8);">${hashesPerSecond.toLocaleString()}/s (${progress}%)</span>`;
+
+                  // Enhanced status with memory info if available
+                  let memoryInfo = "";
+                  if (performance.memory) {
+                    const memUsed = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+                    memoryInfo = ` | ${memUsed}MB`;
+                  }
+
+                  statusRight.innerHTML = `<span style="color: rgba(255, 165, 0, 0.8);">${hashesPerSecond.toLocaleString()}/s (${progress}%${memoryInfo})</span>`;
 
                   lastUpdate = now;
                   lastChecked = checked;
+
+                  // Adaptive performance adjustment
+                  if (hashesPerSecond < 50 && currentBatchSize > 5) {
+                    currentBatchSize = Math.max(5, Math.floor(currentBatchSize * 0.8));
+                  } else if (hashesPerSecond > 2000 && currentBatchSize < 100) {
+                    currentBatchSize = Math.min(100, Math.floor(currentBatchSize * 1.2));
+                  }
                 }
               }
 
@@ -2904,30 +3026,51 @@ Ready to crack hashes.`;
                 }
               }
 
-              // Main cracking process
+              // Main cracking process (main-thread only)
               async function processWords() {
-                if (foundWord || checked >= totalWords) {
+                if (foundWord || checked >= totalWords || shouldStop) {
                   return;
                 }
 
-                const wordBatch = wordlist.slice(checked, checked + batchSize);
+                if (isPaused) {
+                  setTimeout(processWords, 100); // Check again in 100ms
+                  return;
+                }
 
+                const wordBatch = optimizedWordlist.slice(checked, checked + currentBatchSize);
+                await processSynchronously(wordBatch);
+                updateStats();
+
+                // Dynamic batch size optimization based on performance
+                if (checked % 100 === 0 && checked > 100) {
+                  const newBatchSize = getOptimizedBatchSize(type, totalWords - checked);
+                  if (newBatchSize !== currentBatchSize) {
+                    currentBatchSize = newBatchSize;
+                  }
+                }
+
+                if (foundWord) {
+                  completeCracking(foundWord);
+                } else if (checked >= totalWords) {
+                  completeCracking(null);
+                } else {
+                  const delay = type === 'bcrypt' ? 10 : (hashesPerSecond > 1000 ? 3 : 5);
+                  setTimeout(processWords, delay);
+                }
+              }
+
+              // Synchronous processing for each batch
+              async function processSynchronously(wordBatch) {
                 for (const word of wordBatch) {
-                  // Show only some attempts to avoid UI flooding
                   const showAttempt = Math.random() > 0.85;
-
                   try {
                     let isMatch = false;
-                    
                     if (type === 'bcrypt') {
-                      // For bcrypt, use verification function
                       isMatch = verifyBcrypt(word, hashToValidate);
                     } else {
-                      // For other hash types, generate and compare
-                      const wordHash = await generateHash(word, type);
+                      const wordHash = await generateHashOptimized(word, type);
                       isMatch = wordHash.toLowerCase() === hash.toLowerCase();
                     }
-
                     if (isMatch) {
                       foundWord = word;
                       addAttempt(word, true);
@@ -2936,20 +3079,9 @@ Ready to crack hashes.`;
                       addAttempt(word, false);
                     }
                   } catch (e) {
-                    console.error("Hash error:", e);
+                    console.error('Hash error:', e);
                   }
-
                   checked++;
-                }
-
-                updateStats();
-
-                if (foundWord) {
-                  completeCracking(foundWord);
-                } else if (checked >= totalWords) {
-                  completeCracking(null);
-                } else {
-                  setTimeout(processWords, 5);
                 }
               }
 
@@ -2962,6 +3094,11 @@ Ready to crack hashes.`;
                 // Clear attempts area but preserve height
                 attemptsArea.innerHTML = "";
 
+                // Cleanup: Clear hash cache if it's large
+                if (hashCache.size > 5000) {
+                  hashCache.clear();
+                }
+
                 if (result) {
                   // Success - more compact success message
                   const resultBox = document.createElement("div");
@@ -2973,13 +3110,17 @@ Ready to crack hashes.`;
                   resultBox.style.flexDirection = "column";
                   resultBox.style.gap = "4px";
 
-                  // Simple clear result display with flex layout
+                  // Enhanced result display with performance metrics
+                  const totalAttempts = checked.toLocaleString();
+                  const efficiency = ((checked / totalWords) * 100).toFixed(1);
+                  
                   resultBox.innerHTML = `
 <div style="color: rgba(100, 255, 100, 0.9); font-weight: bold; display: flex; justify-content: space-between;">
   <span>✓ HASH CRACKED</span>
   <span style="font-size: 9px; color: rgba(180, 180, 180, 0.7); font-weight: normal;">${hashesPerSecond.toLocaleString()}/sec | ${elapsed}s</span>
 </div>
-<div>Plaintext: <span style="color: rgba(255, 200, 0, 0.9); font-weight: bold; font-size: 14px;">${result}</span></div>`;
+<div>Plaintext: <span style="color: rgba(255, 200, 0, 0.9); font-weight: bold; font-size: 14px;">${result}</span></div>
+<div style="font-size: 9px; color: rgba(180, 180, 180, 0.6);">Found after ${totalAttempts} attempts (${efficiency}% of dictionary)</div>`;
 
                   attemptsArea.appendChild(resultBox);
 
@@ -2993,7 +3134,7 @@ Ready to crack hashes.`;
                     { backgroundColor: "rgba(0, 40, 0, 0.3)", duration: 0.8 }
                   );
                 } else {
-                  // Failed - more compact error
+                  // Failed - more compact error with performance stats
                   const resultBox = document.createElement("div");
                   resultBox.style.padding = "6px";
                   resultBox.style.backgroundColor = "rgba(40, 0, 0, 0.3)";
@@ -3002,12 +3143,16 @@ Ready to crack hashes.`;
                   resultBox.style.display = "flex";
                   resultBox.style.flexDirection = "column";
 
-                  // Simple error message with stats on same line
+                  const totalAttempts = checked.toLocaleString();
+                  const avgSpeed = Math.round(checked / (Date.now() - startTime) * 1000);
+
+                  // Enhanced error message with performance metrics
                   resultBox.innerHTML = `
             <div style="color: rgba(255, 100, 100, 0.9); font-weight: bold; display: flex; justify-content: space-between;">
               <span>✗ HASH NOT FOUND</span>
               <span style="font-size: 9px; color: rgba(180, 180, 180, 0.7); font-weight: normal;">${hashesPerSecond.toLocaleString()}/sec | ${elapsed}s</span>
-            </div>`;
+            </div>
+            <div style="font-size: 9px; color: rgba(180, 180, 180, 0.6);">Tried all ${totalAttempts} words (avg: ${avgSpeed.toLocaleString()}/sec)</div>`;
 
                   attemptsArea.appendChild(resultBox);
 
