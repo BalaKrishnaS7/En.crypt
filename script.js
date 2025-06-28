@@ -329,8 +329,8 @@
             <div class="terminal-select-wrapper">
               <select class="terminal-select" id="file-encryption-algorithm">
                 <option value="aes">AES-256</option>
+                <option value="zip">ZIP (AES)</option>
                 <option value="pgp" disabled>PGP/GPG (Coming Soon)</option>
-                <option value="zip" disabled>ZIP (AES) (Coming Soon)</option>
                 <option value="7zip" disabled>7-Zip (AES) (Coming Soon)</option>
               </select>
             </div>
@@ -780,9 +780,144 @@
           }
         }
 
-        // Create DES and RSA instances
+        // Simple ZIP-like compression and encryption simulation
+        class ZIP {
+          // Simple compression simulation using run-length encoding
+          compress(text) {
+            if (!text) return "";
+            
+            let compressed = "";
+            let count = 1;
+            let current = text[0];
+            
+            for (let i = 1; i < text.length; i++) {
+              if (text[i] === current && count < 255) {
+                count++;
+              } else {
+                if (count > 3) {
+                  compressed += `~${count}${current}`;
+                } else {
+                  compressed += current.repeat(count);
+                }
+                current = text[i];
+                count = 1;
+              }
+            }
+            
+            // Handle the last group
+            if (count > 3) {
+              compressed += `~${count}${current}`;
+            } else {
+              compressed += current.repeat(count);
+            }
+            
+            return compressed;
+          }
+          
+          // Simple decompression
+          decompress(compressed) {
+            if (!compressed) return "";
+            
+            let result = "";
+            let i = 0;
+            
+            while (i < compressed.length) {
+              if (compressed[i] === '~') {
+                // Find the count and character
+                let j = i + 1;
+                while (j < compressed.length && /\d/.test(compressed[j])) {
+                  j++;
+                }
+                const count = parseInt(compressed.substring(i + 1, j));
+                const char = compressed[j];
+                result += char.repeat(count);
+                i = j + 1;
+              } else {
+                result += compressed[i];
+                i++;
+              }
+            }
+            
+            return result;
+          }
+          
+          // Encrypt text with compression
+          encrypt(text, password) {
+            if (!text || !password) {
+              throw new Error("Text and password are required");
+            }
+            
+            // Step 1: Compress the text
+            const compressed = this.compress(text);
+            
+            // Step 2: Simple AES-like encryption simulation
+            const keyHash = this.hashPassword(password);
+            let encrypted = "";
+            
+            for (let i = 0; i < compressed.length; i++) {
+              const charCode = compressed.charCodeAt(i);
+              const keyChar = keyHash.charCodeAt(i % keyHash.length);
+              const encryptedChar = charCode ^ keyChar;
+              encrypted += String.fromCharCode(encryptedChar);
+            }
+            
+            // Step 3: Base64 encode and add metadata
+            const result = {
+              data: btoa(encrypted),
+              originalLength: text.length,
+              compressedLength: compressed.length,
+              version: "1.0"
+            };
+            
+            return btoa(JSON.stringify(result));
+          }
+          
+          // Decrypt text with decompression
+          decrypt(ciphertext, password) {
+            try {
+              // Step 1: Parse the encrypted data
+              const parsed = JSON.parse(atob(ciphertext));
+              const encryptedData = atob(parsed.data);
+              
+              // Step 2: Decrypt
+              const keyHash = this.hashPassword(password);
+              let decrypted = "";
+              
+              for (let i = 0; i < encryptedData.length; i++) {
+                const charCode = encryptedData.charCodeAt(i);
+                const keyChar = keyHash.charCodeAt(i % keyHash.length);
+                const decryptedChar = charCode ^ keyChar;
+                decrypted += String.fromCharCode(decryptedChar);
+              }
+              
+              // Step 3: Decompress
+              const result = this.decompress(decrypted);
+              
+              return result;
+            } catch (e) {
+              throw new Error(`ZIP decryption failed: ${e.message}`);
+            }
+          }
+          
+          // Simple password hashing
+          hashPassword(password) {
+            let hash = "";
+            for (let i = 0; i < password.length; i++) {
+              const char = password.charCodeAt(i);
+              hash += String.fromCharCode((char * 7 + 13) % 256);
+            }
+            // Ensure minimum length
+            while (hash.length < 32) {
+              hash += hash;
+            }
+            return hash.substring(0, 32);
+          }
+        }
+
+        // Create DES, RSA, and ZIP instances
         const des = new DES();
         const rsa = new RSA();
+        const zip = new ZIP();
 
         // Modified mockEncrypt function with Caesar cipher validation
         function mockEncrypt(text, algorithm, key) {
@@ -839,6 +974,16 @@
                 .join("");
               result += ".CAESAR";
               break;
+            case "zip":
+              try {
+                if (key.length < 3) {
+                  return "ERROR: ZIP password must be at least 3 characters for security";
+                }
+                result = zip.encrypt(text, key) + ".ZIP";
+              } catch (e) {
+                return "ERROR: ZIP encryption failed: " + e.message;
+              }
+              break;
             default:
               result = btoa(text);
           }
@@ -890,10 +1035,17 @@
               }
               const cleanText = text.replace(".RSA", "");
               result = rsa.decrypt(cleanText, key);
+            } else if (algorithm === "zip") {
+              // ZIP decryption
+              if (key.length < 3) {
+                return "ERROR: ZIP password must be at least 3 characters for security";
+              }
+              const cleanText = text.replace(".ZIP", "");
+              result = zip.decrypt(cleanText, key);
             } else {
               // Remove the algorithm suffix if present
               let cleanText = text;
-              [".AES256", ".DES", ".RSA"].forEach((suffix) => {
+              [".AES256", ".DES", ".RSA", ".ZIP"].forEach((suffix) => {
                 cleanText = cleanText.replace(suffix, "");
               });
               result = atob(cleanText);
@@ -903,6 +1055,8 @@
               return "ERROR: DES decryption failed - " + e.message;
             } else if (algorithm === "rsa") {
               return "ERROR: RSA decryption failed - " + e.message;
+            } else if (algorithm === "zip") {
+              return "ERROR: ZIP decryption failed - " + e.message;
             }
             return "ERROR: Invalid input format or corrupted data";
           }
@@ -1028,6 +1182,9 @@
                 break;
               case "caesar":
                 encryptionKey.placeholder = "Enter shift value (0-25)...";
+                break;
+              case "zip":
+                encryptionKey.placeholder = "Enter ZIP password (min 3 chars)...";
                 break;
             }
           });
@@ -1206,7 +1363,7 @@
             const selectedFile = isFileInput ? fileInput.files[0] : null;
 
             // Show compact initial status
-            outputText.textContent = `Encrypting: ${fileName} (AES-256)`;
+            outputText.textContent = `Encrypting: ${fileName} (${algo.toUpperCase()})`;
 
             if (selectedFile) {
               outputText.textContent += `\nSize: ${formatFileSize(
@@ -1215,7 +1372,7 @@
             }
 
             // Create algorithm-specific progress messages - shorter for space
-            const progressUpdates = getProgressMessages("aes", "encrypt");
+            const progressUpdates = getProgressMessages(algo, "encrypt");
 
             // Simulate encryption process
             simulateFileOperation(
@@ -1278,7 +1435,7 @@
               outputText.textContent = `Decrypting: ${fileName}`;
 
               // Create algorithm-specific progress messages
-              const progressUpdates = getProgressMessages("aes", "decrypt");
+              const progressUpdates = getProgressMessages(algo, "decrypt");
 
               // Simulate decryption process
               simulateFileOperation(
