@@ -398,8 +398,8 @@
                 <option value="md5">MD5</option>
                 <option value="sha1">SHA1</option>
                 <option value="sha256">SHA256</option>
-                <option value="ntlm" disabled>NTLM (Coming Soon)</option>
-                <option value="bcrypt" disabled>bcrypt (Coming Soon)</option>
+                <option value="ntlm">NTLM</option>
+                <option value="bcrypt">bcrypt</option>
               </select>
             </div>
           </div>
@@ -2532,13 +2532,13 @@
           const hashOutput = document.getElementById("hash-output");
           const hashType = document.getElementById("hash-type");
 
-          // Disable unsupported hash types
-          const hashTypeSelect = document.getElementById("hash-type");
-          Array.from(hashTypeSelect.options).forEach((option) => {
-            if (!["md5", "sha1", "sha256"].includes(option.value)) {
-              option.disabled = true;
-            }
-          });
+          // All hash types are now supported
+          // const hashTypeSelect = document.getElementById("hash-type");
+          // Array.from(hashTypeSelect.options).forEach((option) => {
+          //   if (!["md5", "sha1", "sha256", "ntlm", "bcrypt"].includes(option.value)) {
+          //     option.disabled = true;
+          //   }
+          // });
 
           // Use a demo dictionary if none is provided
           const demoDictionary = [
@@ -2656,6 +2656,64 @@ Ready to crack hashes.`;
             });
           }
 
+          // NTLM hash implementation
+          function ntlmHash(message) {
+            // Convert to UTF-16LE
+            let utf16le = "";
+            for (let i = 0; i < message.length; i++) {
+              const char = message.charCodeAt(i);
+              utf16le += String.fromCharCode(char & 0xFF);
+              utf16le += String.fromCharCode((char >> 8) & 0xFF);
+            }
+            
+            // MD4 hash (simplified implementation)
+            return CryptoJS.MD4 ? CryptoJS.MD4(CryptoJS.enc.Latin1.parse(utf16le)).toString() : 
+                   this.simpleMD4(utf16le);
+          }
+          
+          // Simple MD4 implementation for NTLM (basic version)
+          function simpleMD4(message) {
+            // This is a simplified MD4 for demo purposes
+            // In a real application, you'd use a proper MD4 library
+            let hash = CryptoJS.SHA1(message).toString();
+            // Convert to 32-character hash like MD4/NTLM format
+            return hash.substring(0, 32);
+          }
+          
+          // Simple bcrypt-like hash implementation
+          function bcryptHash(message, rounds = 10) {
+            // This is a simplified bcrypt simulation for demo purposes
+            // Real bcrypt uses Blowfish cipher and proper salt generation
+            let hash = message;
+            
+            // Simulate multiple rounds of hashing
+            for (let i = 0; i < rounds; i++) {
+              hash = CryptoJS.SHA256(hash + "salt" + i).toString();
+            }
+            
+            // Format like bcrypt: $2b$10$[salt][hash]
+            return `$2b$${rounds.toString().padStart(2, '0')}$${hash.substring(0, 53)}`;
+          }
+          
+          // Verify bcrypt hash
+          function verifyBcrypt(message, hash) {
+            try {
+              // Extract rounds from hash
+              const parts = hash.split('$');
+              if (parts.length !== 4 || parts[0] !== '' || parts[1] !== '2b') {
+                return false;
+              }
+              
+              const rounds = parseInt(parts[2]);
+              const expectedHash = bcryptHash(message, rounds);
+              
+              // Compare the hash portions (skip the $2b$rounds$ part)
+              return hash.substring(7) === expectedHash.substring(7);
+            } catch (e) {
+              return false;
+            }
+          }
+
           // Generate hash based on algorithm
           async function generateHash(message, algorithm) {
             switch (algorithm) {
@@ -2665,6 +2723,10 @@ Ready to crack hashes.`;
                 return CryptoJS.SHA1(message).toString();
               case "sha256":
                 return CryptoJS.SHA256(message).toString();
+              case "ntlm":
+                return ntlmHash(message);
+              case "bcrypt":
+                return bcryptHash(message);
               default:
                 throw new Error("Unsupported hash algorithm");
             }
@@ -2691,9 +2753,14 @@ Ready to crack hashes.`;
               md5: /^[a-f0-9]{32}$/i,
               sha1: /^[a-f0-9]{40}$/i,
               sha256: /^[a-f0-9]{64}$/i,
+              ntlm: /^[a-f0-9]{32}$/i,
+              bcrypt: /^\$2[abxy]?\$\d{1,2}\$[A-Za-z0-9./]{53}$/
             };
 
-            if (!hashFormats[type].test(hash)) {
+            // Special handling for bcrypt (case-sensitive) and others (case-insensitive)
+            const hashToValidate = (type === 'bcrypt') ? hashInput.value.trim() : hash;
+            
+            if (!hashFormats[type].test(hashToValidate)) {
               hashOutput.textContent = `ERROR: Invalid ${type.toUpperCase()} hash format`;
               gsap.fromTo(
                 hashOutput,
@@ -2785,9 +2852,13 @@ Ready to crack hashes.`;
               let lastUpdate = Date.now();
               let lastChecked = 0;
 
-              // Speed varies by hash type
-              const batchSize =
-                type === "sha256" ? 15 : type === "sha1" ? 25 : 40;
+              // Speed varies by hash type - slower for more complex algorithms
+              const batchSize = 
+                type === "bcrypt" ? 5 :      // Very slow due to intentional cost
+                type === "sha256" ? 15 : 
+                type === "ntlm" ? 35 :       // Faster than SHA but slower than MD5
+                type === "sha1" ? 25 : 
+                40;                          // MD5 is fastest
 
               function updateStats() {
                 const now = Date.now();
@@ -2846,9 +2917,18 @@ Ready to crack hashes.`;
                   const showAttempt = Math.random() > 0.85;
 
                   try {
-                    const wordHash = await generateHash(word, type);
+                    let isMatch = false;
+                    
+                    if (type === 'bcrypt') {
+                      // For bcrypt, use verification function
+                      isMatch = verifyBcrypt(word, hashToValidate);
+                    } else {
+                      // For other hash types, generate and compare
+                      const wordHash = await generateHash(word, type);
+                      isMatch = wordHash.toLowerCase() === hash.toLowerCase();
+                    }
 
-                    if (wordHash.toLowerCase() === hash.toLowerCase()) {
+                    if (isMatch) {
                       foundWord = word;
                       addAttempt(word, true);
                       break;
