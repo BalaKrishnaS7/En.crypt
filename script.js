@@ -330,7 +330,7 @@
               <select class="terminal-select" id="file-encryption-algorithm">
                 <option value="aes">AES-256</option>
                 <option value="zip">ZIP (AES)</option>
-                <option value="pgp" disabled>PGP/GPG (Coming Soon)</option>
+                <option value="pgp">PGP/GPG</option>
                 <option value="7zip" disabled>7-Zip (AES) (Coming Soon)</option>
               </select>
             </div>
@@ -914,10 +914,158 @@
           }
         }
 
-        // Create DES, RSA, and ZIP instances
+        // Simplified PGP-like encryption implementation
+        class PGP {
+          constructor() {
+            this.keySize = 256; // Simplified key size
+          }
+          
+          // Generate a simple key pair from passphrase
+          generateKeyPair(passphrase) {
+            if (!passphrase || passphrase.length < 4) {
+              throw new Error("Passphrase must be at least 4 characters long");
+            }
+            
+            // Simple key derivation from passphrase
+            let publicKey = "";
+            let privateKey = "";
+            
+            for (let i = 0; i < passphrase.length; i++) {
+              const char = passphrase.charCodeAt(i);
+              publicKey += String.fromCharCode((char * 3 + 7) % 256);
+              privateKey += String.fromCharCode((char * 5 + 11) % 256);
+            }
+            
+            // Pad keys to minimum length
+            while (publicKey.length < 32) {
+              publicKey += publicKey;
+            }
+            while (privateKey.length < 32) {
+              privateKey += privateKey;
+            }
+            
+            return {
+              publicKey: publicKey.substring(0, 32),
+              privateKey: privateKey.substring(0, 32),
+              keyId: this.generateKeyId(passphrase)
+            };
+          }
+          
+          // Generate a simple key ID for verification
+          generateKeyId(passphrase) {
+            let keyId = 0;
+            for (let i = 0; i < passphrase.length; i++) {
+              keyId = (keyId + passphrase.charCodeAt(i) * (i + 1)) % 65536;
+            }
+            return keyId.toString(16).padStart(4, '0').toUpperCase();
+          }
+          
+          // Generate session key
+          generateSessionKey() {
+            let sessionKey = "";
+            for (let i = 0; i < 16; i++) {
+              sessionKey += String.fromCharCode(Math.floor(Math.random() * 256));
+            }
+            return sessionKey;
+          }
+          
+          // Encrypt data with session key
+          encryptWithSessionKey(data, sessionKey) {
+            let encrypted = "";
+            for (let i = 0; i < data.length; i++) {
+              const dataChar = data.charCodeAt(i);
+              const keyChar = sessionKey.charCodeAt(i % sessionKey.length);
+              encrypted += String.fromCharCode(dataChar ^ keyChar);
+            }
+            return encrypted;
+          }
+          
+          // Encrypt session key with public key
+          encryptSessionKey(sessionKey, publicKey) {
+            let encrypted = "";
+            for (let i = 0; i < sessionKey.length; i++) {
+              const keyChar = sessionKey.charCodeAt(i);
+              const pubChar = publicKey.charCodeAt(i % publicKey.length);
+              encrypted += String.fromCharCode((keyChar + pubChar) % 256);
+            }
+            return encrypted;
+          }
+          
+          // Decrypt session key with private key
+          decryptSessionKey(encryptedSessionKey, privateKey) {
+            let decrypted = "";
+            for (let i = 0; i < encryptedSessionKey.length; i++) {
+              const encChar = encryptedSessionKey.charCodeAt(i);
+              const privChar = privateKey.charCodeAt(i % privateKey.length);
+              decrypted += String.fromCharCode((encChar - privChar + 256) % 256);
+            }
+            return decrypted;
+          }
+          
+          // Main encrypt function
+          encrypt(plaintext, passphrase) {
+            if (!plaintext || !passphrase) {
+              throw new Error("Both plaintext and passphrase are required");
+            }
+            
+            // Generate key pair
+            const keyPair = this.generateKeyPair(passphrase);
+            
+            // Generate session key
+            const sessionKey = this.generateSessionKey();
+            
+            // Encrypt data with session key
+            const encryptedData = this.encryptWithSessionKey(plaintext, sessionKey);
+            
+            // Encrypt session key with public key
+            const encryptedSessionKey = this.encryptSessionKey(sessionKey, keyPair.publicKey);
+            
+            // Create PGP message structure
+            const pgpMessage = {
+              version: "1.0",
+              keyId: keyPair.keyId,
+              encryptedSessionKey: btoa(encryptedSessionKey),
+              encryptedData: btoa(encryptedData),
+              timestamp: Date.now()
+            };
+            
+            return btoa(JSON.stringify(pgpMessage));
+          }
+          
+          // Main decrypt function
+          decrypt(ciphertext, passphrase) {
+            try {
+              // Parse PGP message
+              const pgpMessage = JSON.parse(atob(ciphertext));
+              
+              // Generate key pair from passphrase
+              const keyPair = this.generateKeyPair(passphrase);
+              
+              // Verify key ID
+              if (pgpMessage.keyId !== keyPair.keyId) {
+                throw new Error("Wrong passphrase - key ID mismatch");
+              }
+              
+              // Decrypt session key
+              const encryptedSessionKey = atob(pgpMessage.encryptedSessionKey);
+              const sessionKey = this.decryptSessionKey(encryptedSessionKey, keyPair.privateKey);
+              
+              // Decrypt data
+              const encryptedData = atob(pgpMessage.encryptedData);
+              const plaintext = this.encryptWithSessionKey(encryptedData, sessionKey);
+              
+              return plaintext;
+            } catch (e) {
+              throw new Error(`PGP decryption failed: ${e.message}`);
+            }
+          }
+        }
+
+        // Create DES, RSA, ZIP, and PGP instances
         const des = new DES();
         const rsa = new RSA();
         const zip = new ZIP();
+        const pgp = new PGP();
 
         // Modified mockEncrypt function with Caesar cipher validation
         function mockEncrypt(text, algorithm, key) {
@@ -974,16 +1122,6 @@
                 .join("");
               result += ".CAESAR";
               break;
-            case "zip":
-              try {
-                if (key.length < 3) {
-                  return "ERROR: ZIP password must be at least 3 characters for security";
-                }
-                result = zip.encrypt(text, key) + ".ZIP";
-              } catch (e) {
-                return "ERROR: ZIP encryption failed: " + e.message;
-              }
-              break;
             default:
               result = btoa(text);
           }
@@ -1035,17 +1173,10 @@
               }
               const cleanText = text.replace(".RSA", "");
               result = rsa.decrypt(cleanText, key);
-            } else if (algorithm === "zip") {
-              // ZIP decryption
-              if (key.length < 3) {
-                return "ERROR: ZIP password must be at least 3 characters for security";
-              }
-              const cleanText = text.replace(".ZIP", "");
-              result = zip.decrypt(cleanText, key);
             } else {
               // Remove the algorithm suffix if present
               let cleanText = text;
-              [".AES256", ".DES", ".RSA", ".ZIP"].forEach((suffix) => {
+              [".AES256", ".DES", ".RSA"].forEach((suffix) => {
                 cleanText = cleanText.replace(suffix, "");
               });
               result = atob(cleanText);
@@ -1055,8 +1186,6 @@
               return "ERROR: DES decryption failed - " + e.message;
             } else if (algorithm === "rsa") {
               return "ERROR: RSA decryption failed - " + e.message;
-            } else if (algorithm === "zip") {
-              return "ERROR: ZIP decryption failed - " + e.message;
             }
             return "ERROR: Invalid input format or corrupted data";
           }
@@ -1182,9 +1311,6 @@
                 break;
               case "caesar":
                 encryptionKey.placeholder = "Enter shift value (0-25)...";
-                break;
-              case "zip":
-                encryptionKey.placeholder = "Enter ZIP password (min 3 chars)...";
                 break;
             }
           });
