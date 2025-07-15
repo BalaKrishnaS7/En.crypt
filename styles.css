@@ -582,3 +582,444 @@ body::-webkit-scrollbar {
   -moz-user-select: text;
   -ms-user-select: text;
 }
+
+/* Mobile Responsive Design */
+@media screen and (max-width: 768px) {
+  /* Adjust binary matrix for mobile performance */
+  .binary-overlay {
+    font-size: 12px;
+    filter: blur(0.3px);
+  }
+  
+  .binary-bit {
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+  }
+
+  /* Mobile navbar adjustments - ensure it stays visible */
+  .navbar {
+    top: 10px;
+    height: 50px;
+    padding: 0 15px;
+    max-width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    z-index: 200; /* Increase z-index to ensure it stays above terminal */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .navbar-brand {
+    font-size: 16px;
+    padding: 6px 12px;
+    margin-bottom: 8px;
+  }
+
+  .navbar-tools {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tool-button {
+    padding: 8px 12px;
+    font-size: 11px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Mobile terminal container - adjusted positioning */
+  .terminal-container {
+    width: 95%;
+    max-width: 95%;
+    height: 75vh; /* Reduced from 85vh */
+    max-height: 500px; /* Reduced from 600px */
+    border-radius: 10px;
+    top: 60%; /* Adjusted to move down and avoid navbar */
+    margin-top: 50px; /* Increased margin to create more space from navbar */
+  }
+
+  .terminal-header {
+    height: 35px;
+    padding: 0 12px;
+  }
+
+  .terminal-title {
+    font-size: 13px;
+    letter-spacing: 0.8px;
+  }
+
+  .terminal-btn {
+    width: 12px;
+    height: 12px;
+  }
+
+  .terminal-body {
+    padding: 15px 12px; /* Reduced padding */
+  }
+
+  .terminal-content {
+    gap: 12px; /* Reduced gap */
+  }
+
+  /* Mobile terminal rows - stack vertically */
+  .terminal-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px; /* Reduced gap */
+    width: 100%; /* Ensure full width */
+  }
+
+  .terminal-row.output-area {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .terminal-label {
+    min-width: auto;
+    font-size: 12px; /* Reduced font size */
+    letter-spacing: 0.5px;
+    width: 100%; /* Full width for better alignment */
+    margin-bottom: 2px;
+  }
+
+  /* Mobile input styling */
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    width: 100%;
+    padding: 12px 10px; /* Adjusted padding for better touch targets */
+    font-size: 14px; /* Slightly increased for better readability */
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 4px; /* Add spacing between elements */
+  }
+
+  .terminal-textarea {
+    min-height: 80px; /* Reduced height */
+    resize: vertical;
+    padding: 12px; /* Consistent padding */
+  }
+
+  .password-wrapper {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .password-toggle {
+    right: 10px;
+    width: 30px; /* Larger touch target */
+    height: 30px;
+  }
+
+  /* Mobile terminal buttons */
+  .terminal-button {
+    padding: 12px 14px; /* Increased padding for better touch targets */
+    font-size: 14px; /* Increased font size for better readability */
+    border-radius: 8px; /* Slightly more rounded */
+    letter-spacing: 0.3px;
+    width: 100%;
+    margin-bottom: 10px; /* Increased margin for better spacing */
+    min-height: 44px; /* Minimum height for touch targets */
+  }
+
+  /* Mobile button rows */
+  .terminal-row:has(.terminal-button) {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px; /* Increased gap */
+  }
+
+  .terminal-row:has(.terminal-button) .terminal-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Special handling for file encryption browse button */
+  .terminal-row:has(#browse-btn),
+  .terminal-row:has(#browse-dict-btn) {
+    flex-direction: column; /* Changed to column for better mobile layout */
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .terminal-row:has(#browse-btn) #browse-btn,
+  .terminal-row:has(#browse-dict-btn) #browse-dict-btn {
+    width: 100%; /* Full width for better touch target */
+    margin-left: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 12px 14px;
+    min-height: 44px;
+  }
+
+  /* Mobile output area */
+  .terminal-output {
+    width: 100%;
+    min-height: 80px; /* Increased for better visibility */
+    max-height: 150px; /* Increased for better content visibility */
+    padding: 12px; /* Increased padding */
+    font-size: 14px; /* Increased for better readability */
+    line-height: 1.4;
+    box-sizing: border-box;
+  }
+
+  /* Mobile copy button */
+  #copy-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    padding: 4px 8px;
+    font-size: 10px;
+    border-radius: 4px;
+  }
+
+  /* Mobile select wrapper */
+  .terminal-select-wrapper {
+    width: 100%;
+  }
+
+  .terminal-select {
+    width: 100%;
+    padding-right: 35px;
+  }
+
+  /* Mobile hash reverse specific adjustments */
+  #hash-output {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  /* Mobile file download button */
+  #file-download-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+  }
+
+  /* Touch-friendly adjustments */
+  .terminal-button:hover {
+    transform: none; /* Remove hover transforms on mobile */
+  }
+
+  .tool-button:hover {
+    transform: none;
+  }
+
+  /* Optimize performance on mobile */
+  .binary-overlay {
+    will-change: auto;
+  }
+
+  /* Ensure proper touch scrolling */
+  .terminal-body {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  .terminal-output {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Extra small screens (phones in portrait) */
+@media screen and (max-width: 480px) {
+  .navbar {
+    top: 5px;
+    padding: 10px;
+    z-index: 200;
+  }
+
+  .navbar-brand {
+    font-size: 16px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+  }
+
+  .navbar-tools {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .tool-button {
+    padding: 10px 15px;
+    font-size: 12px;
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  .terminal-container {
+    width: 98%;
+    height: 70vh; /* Further reduced */
+    top: 60%; /* Adjusted positioning */
+    margin-top: 60px; /* Increased to accommodate stacked navbar */
+  }
+
+  .terminal-body {
+    padding: 15px 12px; /* Increased for better spacing */
+  }
+
+  .terminal-content {
+    gap: 15px; /* Increased for better spacing */
+  }
+
+  .terminal-label {
+    font-size: 14px; /* Increased for better readability */
+    margin-bottom: 5px;
+  }
+
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    padding: 12px;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .terminal-button {
+    padding: 12px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    min-height: 48px; /* Increased for better touch targets */
+  }
+
+  .terminal-output {
+    min-height: 80px;
+    max-height: 150px;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .terminal-textarea {
+    min-height: 80px;
+  }
+
+  /* Reduce binary matrix density on very small screens */
+  .binary-overlay {
+    font-size: 10px;
+  }
+
+  .binary-bit {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  /* Adjust navbar for landscape */
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+    padding: 8px 15px;
+    margin-top: 5px;
+  }
+
+  .navbar-brand {
+    margin-bottom: 0;
+  }
+
+  .navbar-tools {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  /* Adjust terminal for landscape */
+  .terminal-container {
+    height: 80vh; /* Adjusted for landscape */
+    max-height: 400px;
+    top: 55%;
+    margin-top: 40px;
+  }
+
+  .terminal-body {
+    padding: 12px;
+  }
+
+  /* Optimize for horizontal space in landscape */
+  .terminal-row {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .terminal-label {
+    min-width: 100px;
+    width: auto;
+    margin-bottom: 0;
+  }
+
+  .terminal-output {
+    max-height: 100px;
+  }
+
+  .terminal-textarea {
+    min-height: 60px;
+  }
+
+  /* Button row remains vertical for better usability */
+  .terminal-row:has(.terminal-button) {
+    flex-direction: column;
+  }
+}
+
+/* High DPI displays */
+@media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+  .binary-overlay {
+    filter: blur(0.2px);
+  }
+  
+  .terminal-container {
+    border-width: 0.5px;
+  }
+  
+  /* Sharper text for high DPI displays */
+  .terminal-label,
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select,
+  .terminal-button,
+  .terminal-output,
+  .navbar-brand,
+  .tool-button {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets for better usability */
+  .tool-button,
+  .terminal-button,
+  .terminal-btn,
+  .password-toggle {
+    min-height: 44px;
+  }
+  
+  /* Remove hover effects that might cause issues on touch devices */
+  .tool-button:hover,
+  .terminal-button:hover,
+  .navbar-brand:hover {
+    transform: none;
+  }
+  
+  /* Ensure proper scrolling on touch devices */
+  .terminal-body,
+  .terminal-output {
+    -webkit-overflow-scrolling: touch;
+  }
+}
