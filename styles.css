@@ -600,8 +600,7 @@ body::-webkit-scrollbar {
   /* Mobile navbar adjustments - ensure it stays visible */
   .navbar {
     top: 10px;
-    height: 50px;
-    padding: 0 15px;
+    padding: 10px 15px;
     max-width: 95%;
     margin-left: 2.5%;
     margin-right: 2.5%;
@@ -610,8 +609,6 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     height: auto;
-    padding-top: 8px;
-    padding-bottom: 8px;
   }
 
   .navbar-brand {
@@ -637,11 +634,11 @@ body::-webkit-scrollbar {
   .terminal-container {
     width: 95%;
     max-width: 95%;
-    height: 75vh; /* Reduced from 85vh */
-    max-height: 500px; /* Reduced from 600px */
+    height: 70vh; /* Reduced from 75vh */
+    max-height: 500px;
     border-radius: 10px;
-    top: 60%; /* Adjusted to move down and avoid navbar */
-    margin-top: 50px; /* Increased margin to create more space from navbar */
+    top: 50%; /* Adjusted to center better */
+    margin-top: 80px; /* Increased margin to create more space from navbar */
   }
 
   .terminal-header {
@@ -671,8 +668,9 @@ body::-webkit-scrollbar {
   .terminal-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px; /* Reduced gap */
+    gap: 10px; /* Increased gap for better spacing */
     width: 100%; /* Ensure full width */
+    margin-bottom: 12px; /* Add bottom margin for better separation */
   }
 
   .terminal-row.output-area {
@@ -682,10 +680,10 @@ body::-webkit-scrollbar {
 
   .terminal-label {
     min-width: auto;
-    font-size: 12px; /* Reduced font size */
+    font-size: 13px; /* Slightly increased font size */
     letter-spacing: 0.5px;
     width: 100%; /* Full width for better alignment */
-    margin-bottom: 2px;
+    margin-bottom: 4px; /* Increased margin */
   }
 
   /* Mobile input styling */
@@ -693,11 +691,12 @@ body::-webkit-scrollbar {
   .terminal-textarea,
   .terminal-select {
     width: 100%;
-    padding: 12px 10px; /* Adjusted padding for better touch targets */
-    font-size: 14px; /* Slightly increased for better readability */
-    border-radius: 6px;
+    padding: 14px 12px; /* Increased padding for better touch targets */
+    font-size: 16px; /* Increased for better readability on mobile */
+    border-radius: 8px;
     box-sizing: border-box;
-    margin-bottom: 4px; /* Add spacing between elements */
+    margin-bottom: 8px; /* Increased spacing between elements */
+    min-height: 48px; /* Minimum height for better touch targets */
   }
 
   .terminal-textarea {
@@ -708,31 +707,37 @@ body::-webkit-scrollbar {
 
   .password-wrapper {
     width: 100%;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    position: relative;
   }
 
   .password-toggle {
-    right: 10px;
-    width: 30px; /* Larger touch target */
-    height: 30px;
+    right: 12px;
+    width: 36px; /* Larger touch target */
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Mobile terminal buttons */
   .terminal-button {
-    padding: 12px 14px; /* Increased padding for better touch targets */
-    font-size: 14px; /* Increased font size for better readability */
-    border-radius: 8px; /* Slightly more rounded */
-    letter-spacing: 0.3px;
+    padding: 14px 16px; /* Increased padding for better touch targets */
+    font-size: 16px; /* Increased font size for better readability */
+    border-radius: 10px; /* More rounded for modern look */
+    letter-spacing: 0.5px;
     width: 100%;
-    margin-bottom: 10px; /* Increased margin for better spacing */
-    min-height: 44px; /* Minimum height for touch targets */
+    margin-bottom: 12px; /* Increased margin for better spacing */
+    min-height: 50px; /* Increased minimum height for touch targets */
   }
 
   /* Mobile button rows */
   .terminal-row:has(.terminal-button) {
     flex-direction: column;
     width: 100%;
-    gap: 10px; /* Increased gap */
+    gap: 14px; /* Increased gap */
+    margin-top: 10px; /* Add top margin */
+    margin-bottom: 10px; /* Add bottom margin */
   }
 
   .terminal-row:has(.terminal-button) .terminal-button {
@@ -748,37 +753,46 @@ body::-webkit-scrollbar {
     flex-direction: column; /* Changed to column for better mobile layout */
     align-items: flex-start;
     width: 100%;
+    margin-bottom: 15px;
   }
 
   .terminal-row:has(#browse-btn) #browse-btn,
   .terminal-row:has(#browse-dict-btn) #browse-dict-btn {
     width: 100%; /* Full width for better touch target */
     margin-left: 0;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    padding: 12px 14px;
-    min-height: 44px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+    min-height: 50px;
+    font-size: 16px;
+    border-radius: 10px;
   }
 
   /* Mobile output area */
   .terminal-output {
     width: 100%;
-    min-height: 80px; /* Increased for better visibility */
-    max-height: 150px; /* Increased for better content visibility */
-    padding: 12px; /* Increased padding */
-    font-size: 14px; /* Increased for better readability */
-    line-height: 1.4;
+    min-height: 100px; /* Increased for better visibility */
+    max-height: 200px; /* Increased for better content visibility */
+    padding: 15px; /* Increased padding */
+    font-size: 16px; /* Increased for better readability */
+    line-height: 1.5;
     box-sizing: border-box;
+    margin-top: 5px;
   }
 
   /* Mobile copy button */
   #copy-btn {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    padding: 4px 8px;
-    font-size: 10px;
-    border-radius: 4px;
+    top: 6px;
+    right: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    min-height: 36px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Mobile select wrapper */
@@ -833,75 +847,84 @@ body::-webkit-scrollbar {
 @media screen and (max-width: 480px) {
   .navbar {
     top: 5px;
-    padding: 10px;
+    padding: 8px;
     z-index: 200;
   }
 
   .navbar-brand {
-    font-size: 16px;
-    padding: 6px 10px;
-    margin-bottom: 12px;
+    font-size: 18px;
+    padding: 8px 12px;
+    margin-bottom: 15px;
   }
 
   .navbar-tools {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     align-items: center;
   }
 
   .tool-button {
-    padding: 10px 15px;
-    font-size: 12px;
+    padding: 12px 15px;
+    font-size: 14px;
     width: 100%;
-    max-width: 200px;
+    max-width: 250px;
     text-align: center;
+    min-height: 45px;
   }
 
   .terminal-container {
     width: 98%;
-    height: 70vh; /* Further reduced */
-    top: 60%; /* Adjusted positioning */
-    margin-top: 60px; /* Increased to accommodate stacked navbar */
+    height: 65vh; /* Further reduced */
+    top: 55%; /* Adjusted positioning */
+    margin-top: 100px; /* Increased to accommodate stacked navbar */
   }
 
   .terminal-body {
-    padding: 15px 12px; /* Increased for better spacing */
+    padding: 18px 15px; /* Increased for better spacing */
   }
 
   .terminal-content {
-    gap: 15px; /* Increased for better spacing */
+    gap: 18px; /* Increased for better spacing */
   }
 
   .terminal-label {
-    font-size: 14px; /* Increased for better readability */
-    margin-bottom: 5px;
+    font-size: 15px; /* Increased for better readability */
+    margin-bottom: 8px;
+    letter-spacing: 0.8px;
   }
 
   .terminal-input,
   .terminal-textarea,
   .terminal-select {
-    padding: 12px;
-    font-size: 14px;
-    margin-bottom: 8px;
+    padding: 15px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    min-height: 50px;
+    border-radius: 10px;
   }
 
   .terminal-button {
-    padding: 12px;
-    font-size: 14px;
-    margin-bottom: 12px;
-    min-height: 48px; /* Increased for better touch targets */
+    padding: 15px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    min-height: 55px; /* Increased for better touch targets */
+    border-radius: 10px;
+    letter-spacing: 0.8px;
   }
 
   .terminal-output {
-    min-height: 80px;
-    max-height: 150px;
-    padding: 12px;
-    font-size: 14px;
+    min-height: 100px;
+    max-height: 180px;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 10px;
   }
 
   .terminal-textarea {
-    min-height: 80px;
+    min-height: 100px;
+    line-height: 1.5;
   }
 
   /* Reduce binary matrix density on very small screens */
@@ -923,30 +946,34 @@ body::-webkit-scrollbar {
     justify-content: space-between;
     align-items: center;
     height: auto;
-    padding: 8px 15px;
+    padding: 10px 15px;
     margin-top: 5px;
+    margin-bottom: 10px;
   }
 
   .navbar-brand {
     margin-bottom: 0;
+    font-size: 16px;
+    padding: 6px 12px;
   }
 
   .navbar-tools {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-end;
+    gap: 10px;
   }
 
   /* Adjust terminal for landscape */
   .terminal-container {
-    height: 80vh; /* Adjusted for landscape */
-    max-height: 400px;
-    top: 55%;
-    margin-top: 40px;
+    height: 75vh; /* Adjusted for landscape */
+    max-height: 350px;
+    top: 50%;
+    margin-top: 50px;
   }
 
   .terminal-body {
-    padding: 12px;
+    padding: 15px;
   }
 
   /* Optimize for horizontal space in landscape */
@@ -954,25 +981,30 @@ body::-webkit-scrollbar {
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 10px;
   }
-
+  
   .terminal-label {
     min-width: 100px;
     width: auto;
     margin-bottom: 0;
   }
-
+  
   .terminal-output {
-    max-height: 100px;
+    max-height: 150px;
+  }
+  
+  /* Keep button rows vertical in landscape for better usability */
+  .terminal-row:has(.terminal-button) {
+    flex-direction: column;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
   }
 
   .terminal-textarea {
     min-height: 60px;
-  }
-
-  /* Button row remains vertical for better usability */
-  .terminal-row:has(.terminal-button) {
-    flex-direction: column;
   }
 }
 
@@ -980,6 +1012,18 @@ body::-webkit-scrollbar {
 @media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
   .binary-overlay {
     filter: blur(0.2px);
+  }
+  
+  /* Improve text rendering on high DPI screens */
+  body, .navbar, .terminal-title, .terminal-label, .terminal-input, .terminal-textarea, .terminal-select, .terminal-button, .terminal-output {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Optimize touch targets for high DPI screens */
+  .terminal-button, .tool-button, .password-toggle {
+    min-height: 48px;
   }
   
   .terminal-container {
@@ -1007,19 +1051,36 @@ body::-webkit-scrollbar {
   .terminal-button,
   .terminal-btn,
   .password-toggle {
-    min-height: 44px;
+    min-height: 50px;
+  }
+  
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    min-height: 50px;
   }
   
   /* Remove hover effects that might cause issues on touch devices */
   .tool-button:hover,
   .terminal-button:hover,
-  .navbar-brand:hover {
+  .navbar-brand:hover,
+  .terminal-btn:hover,
+  #copy-btn:hover {
     transform: none;
+    opacity: 1;
   }
   
   /* Ensure proper scrolling on touch devices */
   .terminal-body,
-  .terminal-output {
+  .terminal-output,
+  .terminal-textarea {
     -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  
+  /* Improve tap highlight color */
+  * {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   }
 }
