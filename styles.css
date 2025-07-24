@@ -668,9 +668,9 @@ body::-webkit-scrollbar {
   .terminal-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px; /* Increased gap for better spacing */
-    width: 100%; /* Ensure full width */
-    margin-bottom: 12px; /* Add bottom margin for better separation */
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 5px;
   }
 
   .terminal-row.output-area {
@@ -783,18 +783,21 @@ body::-webkit-scrollbar {
   /* Mobile copy button */
   #copy-btn {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 8px 12px;
-    font-size: 14px;
-    border-radius: 8px;
-    min-height: 40px;
-    min-width: 60px;
+    top: 6px;
+    right: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    min-height: 30px;
+    min-width: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     letter-spacing: 0.5px;
+    background-color: rgba(25, 25, 25, 0.8);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    color: rgba(220, 160, 80, 0.9);
   }
 
   /* Mobile select wrapper */
@@ -848,109 +851,147 @@ body::-webkit-scrollbar {
 /* Extra small screens (phones in portrait) */
 @media screen and (max-width: 480px) {
   .navbar {
-    top: 5px;
-    padding: 10px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 15px 20px;
     z-index: 200;
-    border-radius: 12px;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid rgba(180, 120, 60, 0.2);
+    position: fixed;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
 
   .navbar-brand {
-    font-size: 20px;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    border-radius: 10px;
+    font-size: 24px;
+    padding: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    text-align: center;
+    width: 100%;
+    opacity: 1;
   }
 
   .navbar-tools {
-    flex-direction: column;
-    gap: 14px;
-    width: 100%;
-    align-items: center;
+    display: none; /* Hide the tools in header */
   }
 
   .tool-button {
-    padding: 14px 16px;
+    padding: 16px;
     font-size: 16px;
     width: 100%;
-    max-width: 280px;
+    max-width: 100%;
     text-align: center;
-    min-height: 54px;
+    min-height: 60px;
     border-radius: 10px;
     letter-spacing: 0.8px;
+    margin-bottom: 15px;
+    opacity: 1;
+    transform: none;
   }
 
   .terminal-container {
-    width: 95%;
-    height: 68vh;
-    top: 55%;
-    margin-top: 110px;
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100vh;
+    max-height: none;
+    top: 0;
+    left: 0;
+    margin: 0;
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding-top: 60px; /* Space for the navbar */
+    box-sizing: border-box;
   }
 
   .terminal-header {
-    height: 40px;
+    height: 50px;
     padding: 0 15px;
-    border-radius: 14px 14px 0 0;
+    border-radius: 0;
+    background-color: rgba(15, 15, 18, 0.9);
+    border-bottom: 1px solid rgba(180, 120, 60, 0.25);
   }
 
   .terminal-title {
-    font-size: 15px;
-    letter-spacing: 1px;
+    font-size: 16px;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+    color: rgba(220, 160, 80, 0.9);
   }
 
   .terminal-btn {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     margin-right: 8px;
+    opacity: 0.8;
   }
 
   .terminal-body {
-    padding: 20px 16px;
-    border-radius: 0 0 14px 14px;
+    padding: 20px;
+    border-radius: 0;
+    background-color: rgba(10, 10, 12, 0.95);
+    height: calc(100vh - 50px); /* Full height minus header */
+    box-sizing: border-box;
   }
 
   .terminal-content {
-    gap: 20px;
+    gap: 25px;
+    padding-bottom: 30px;
   }
 
   .terminal-label {
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     letter-spacing: 1px;
     font-weight: 600;
+    color: rgba(220, 160, 80, 0.9);
   }
 
   .terminal-input,
   .terminal-textarea,
   .terminal-select {
-    padding: 16px;
-    font-size: 17px;
-    margin-bottom: 14px;
-    min-height: 56px;
-    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    min-height: 50px;
+    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
+    background-color: rgba(20, 20, 25, 0.6);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .terminal-button {
-    padding: 16px;
-    font-size: 17px;
-    margin-bottom: 16px;
-    min-height: 60px;
-    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    min-height: 50px;
+    border-radius: 8px;
     letter-spacing: 1px;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background-color: rgba(25, 25, 25, 0.8);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    color: rgba(220, 160, 80, 0.9);
+    width: 100%;
   }
 
   .terminal-output {
-    min-height: 110px;
-    max-height: 200px;
-    padding: 16px;
-    font-size: 17px;
-    line-height: 1.6;
-    border-radius: 12px;
+    min-height: 100px;
+    max-height: 150px;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
+    background-color: rgba(20, 20, 25, 0.6);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .terminal-textarea {
