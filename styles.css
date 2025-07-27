@@ -599,16 +599,21 @@ body::-webkit-scrollbar {
 
   /* Mobile navbar adjustments - ensure it stays visible */
   .navbar {
-    top: 10px;
-    padding: 10px 15px;
-    max-width: 95%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
+    top: 0;
+    padding: 15px 20px;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     z-index: 200; /* Increase z-index to ensure it stays above terminal */
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: auto;
+    height: 60px;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid rgba(180, 120, 60, 0.2);
+    position: fixed;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
 
   .navbar-brand {
@@ -634,11 +639,12 @@ body::-webkit-scrollbar {
   .terminal-container {
     width: 95%;
     max-width: 95%;
-    height: 70vh; /* Reduced from 75vh */
-    max-height: 500px;
+    height: auto; /* Changed from 70vh */
+    max-height: 80vh; /* Changed from 500px */
     border-radius: 10px;
     top: 50%; /* Adjusted to center better */
-    margin-top: 80px; /* Increased margin to create more space from navbar */
+    margin-top: 0; /* Removed margin-top */
+    transform: translate(-50%, -50%);
   }
 
   .terminal-header {
@@ -670,7 +676,7 @@ body::-webkit-scrollbar {
     align-items: flex-start;
     gap: 8px;
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
   }
 
   .terminal-row.output-area {
@@ -680,10 +686,10 @@ body::-webkit-scrollbar {
 
   .terminal-label {
     min-width: auto;
-    font-size: 13px; /* Slightly increased font size */
+    font-size: 14px; /* Slightly increased font size */
     letter-spacing: 0.5px;
     width: 100%; /* Full width for better alignment */
-    margin-bottom: 4px; /* Increased margin */
+    margin-bottom: 5px; /* Increased margin */
   }
 
   /* Mobile input styling */
@@ -691,12 +697,12 @@ body::-webkit-scrollbar {
   .terminal-textarea,
   .terminal-select {
     width: 100%;
-    padding: 14px 12px; /* Increased padding for better touch targets */
+    padding: 15px; /* Increased padding for better touch targets */
     font-size: 16px; /* Increased for better readability on mobile */
     border-radius: 8px;
     box-sizing: border-box;
-    margin-bottom: 8px; /* Increased spacing between elements */
-    min-height: 48px; /* Minimum height for better touch targets */
+    margin-bottom: 10px; /* Increased spacing between elements */
+    min-height: 50px; /* Minimum height for better touch targets */
   }
 
   .terminal-textarea {
@@ -722,12 +728,12 @@ body::-webkit-scrollbar {
 
   /* Mobile terminal buttons */
   .terminal-button {
-    padding: 14px 16px; /* Increased padding for better touch targets */
+    padding: 15px; /* Increased padding for better touch targets */
     font-size: 16px; /* Increased font size for better readability */
     border-radius: 10px; /* More rounded for modern look */
     letter-spacing: 0.5px;
     width: 100%;
-    margin-bottom: 12px; /* Increased margin for better spacing */
+    margin-bottom: 15px; /* Increased margin for better spacing */
     min-height: 50px; /* Increased minimum height for touch targets */
   }
 
