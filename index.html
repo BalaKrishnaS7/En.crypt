@@ -1,128 +1,121 @@
 <!DOCTYPE html>
-<html
-  data-wf-domain="spotlight-animation-85ac43.webflow.io"
-  data-wf-page="66b5fe125e28c179fd3de144"
-  data-wf-site="66b5fe125e28c179fd3de137"
-  class="w-mod-js"
->
+<html lang="en">
   <head>
-    <link rel="icon" type="image/png" href="logo.png" />
-    <link href="https://fonts.cdnfonts.com/css/antikor-mono" rel="stylesheet" />
-    <link
-      href="https://db.onlinewebfonts.com/c/0a9c55380b7864dd0c077c40625434e1?family=Thirteen+Pixel+Fonts+Regular"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="mobile.css">
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>En.Crypt</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <!-- Added GSAP library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- Added navbar -->
-    <nav class="navbar">
-      <div class="navbar-brand">En.Crypt</div>
-      <div class="navbar-tools">
-        <button class="tool-button">Text Encrypt</button>
-        <button class="tool-button">File Encrypt</button>
-        <button class="tool-button">Hash Reverse</button>
-      </div>
-    </nav>
+    <header>
+      <h1>En.Crypt</h1>
+      <nav>
+        <button class="tab-link active" data-tab="text">TEXT</button>
+        <button class="tab-link" data-tab="file">FILE</button>
+        <button class="tab-link" data-tab="hash">HASH</button>
+      </nav>
+    </header>
 
-    <!-- Add this below the navbar but before the matrix container -->
-    <div class="terminal-container">
-      <div class="terminal-header">
-        <div class="terminal-buttons">
-          <span class="terminal-btn close"></span>
-          <span class="terminal-btn minimize"></span>
-          <span class="terminal-btn maximize"></span>
+    <main>
+      <section id="text" class="tab-content active">
+        <h2>TEXT ENCRYPTION TERMINAL</h2>
+        <div class="form-group">
+          <label for="text-algorithm">ALGORITHM</label>
+          <select id="text-algorithm">
+            <option>AES-256</option>
+            <option>RSA</option>
+          </select>
         </div>
-        <div class="terminal-title">TEXT ENCRYPTION TERMINAL</div>
-      </div>
-      <div class="terminal-body">
-        <div class="terminal-content">
-          <div class="terminal-row">
-            <label class="terminal-label">ALGORITHM:</label>
-            <div class="terminal-select-wrapper">
-              <select class="terminal-select" id="encryption-algorithm">
-                <option value="aes">AES-256</option>
-                <option value="caesar">Caesar Cipher</option>
-                <option value="des">DES</option>
-                <option value="rsa">RSA</option>
-              </select>
-            </div>
-          </div>
-          <div class="terminal-row">
-            <label class="terminal-label">KEY:</label>
-            <div class="password-wrapper">
-              <input
-                type="password"
-                class="terminal-input"
-                id="encryption-key"
-                placeholder="Enter encryption key..."
-              />
-              <button
-                class="password-toggle"
-                id="pwd-toggle"
-                aria-label="Show/hide password"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="terminal-row input-area">
-            <label class="terminal-label">INPUT:</label>
-            <textarea
-              class="terminal-textarea"
-              id="input-text"
-              placeholder="Enter text to encrypt..."
-            ></textarea>
-          </div>
-          <div class="terminal-row">
-            <button class="terminal-button" id="encrypt-btn">ENCRYPT</button>
-            <button class="terminal-button" id="decrypt-btn">DECRYPT</button>
-            <button class="terminal-button" id="clear-btn">CLEAR</button>
-          </div>
-          <div class="terminal-row output-area">
-            <label class="terminal-label">OUTPUT:</label>
-            <div style="position: relative; width: 100%">
-              <div class="terminal-output" id="output-text"></div>
-              <button
-                class="terminal-button"
-                id="copy-btn"
-                style="
-                  position: absolute;
-                  top: 6px;
-                  right: 6px;
-                  padding: 5px 8px;
-                  font-size: 11px;
-                  opacity: 0.8;
-                "
-              >
-                COPY
-              </button>
-            </div>
+        <div class="form-group">
+          <label for="text-key">KEY</label>
+          <div class="password-wrapper">
+            <input type="password" id="text-key" />
+            <button class="toggle-password">👁️</button>
           </div>
         </div>
-      </div>
-    </div>
+        <div class="form-group">
+          <label for="text-input">INPUT</label>
+          <textarea id="text-input" rows="5"></textarea>
+        </div>
+        <div class="button-group">
+          <button>ENCRYPT</button>
+          <button>DECRYPT</button>
+          <button>CLEAR</button>
+        </div>
+        <div class="form-group">
+          <label for="text-output">OUTPUT</label>
+          <div class="output-wrapper">
+            <textarea id="text-output" rows="5" readonly></textarea>
+            <button class="copy-button">COPY</button>
+          </div>
+        </div>
+      </section>
 
-    <div class="matrix-container">
-      <div class="binary-overlay" id="binary-overlay"></div>
-      <div class="blur-layer"></div>
-    </div>
+      <section id="file" class="tab-content">
+        <h2>FILE ENCRYPTION TERMINAL</h2>
+        <div class="form-group">
+          <label for="file-algorithm">ALGORITHM</label>
+          <select id="file-algorithm">
+            <option>AES-256</option>
+            <option>RSA</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="file-key">KEY</label>
+          <div class="password-wrapper">
+            <input type="password" id="file-key" />
+            <button class="toggle-password">👁️</button>
+          </div>
+        </div>
+        <div class="form-group">
+            <button class="upload-button">UPLOAD FILE</button>
+        </div>
+        <div class="button-group">
+          <button>ENCRYPT FILE</button>
+          <button>DECRYPT FILE</button>
+        </div>
+        <div class="form-group">
+          <label for="file-output">OUTPUT</label>
+          <div class="output-wrapper">
+            <input type="text" id="file-output" readonly />
+            <button class="download-button">DOWNLOAD</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="hash" class="tab-content">
+        <h2>HASH GENERATOR / REVERSER</h2>
+        <div class="form-group">
+            <label for="hash-mode">MODE</label>
+            <select id="hash-mode">
+                <option>Generate</option>
+                <option>Reverse</option>
+            </select>
+        </div>
+        <div class="form-group">
+          <label for="hash-input">INPUT</label>
+          <input type="text" id="hash-input" />
+        </div>
+        <div class="form-group">
+            <label for="hash-algorithm">ALGORITHM</label>
+            <select id="hash-algorithm">
+                <option>MD5</option>
+                <option>SHA-1</option>
+                <option>SHA-256</option>
+            </select>
+        </div>
+        <div class="button-group">
+          <button>GENERATE / REVERSE</button>
+        </div>
+        <div class="form-group">
+          <label for="hash-output">OUTPUT</label>
+          <div class="output-wrapper">
+            <textarea id="hash-output" rows="5" readonly></textarea>
+            <button class="copy-button">COPY</button>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <script src="script.js"></script>
   </body>
