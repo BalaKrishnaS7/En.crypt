@@ -1,129 +1,1239 @@
-/* General Styles */
-body {
-  background-color: #0d0d0d;
-  color: #f4c430;
-  font-family: monospace;
+body,
+html {
   margin: 0;
-  padding: 1rem;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  overflow: hidden;
 }
 
-header {
+.wf-force-outline-none[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Binary matrix styling */
+.matrix-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.binary-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-family: "Thirteen Pixel Fonts Regular", monospace;
+  font-size: 15px;
+  overflow: hidden;
+  filter: blur(0.5px);
+  transition: filter 0.3s ease;
+}
+
+.binary-bit {
+  user-select: none;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(8, 8, 8, 0);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+/* Enhanced blur layers */
+.blur-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  backdrop-filter: blur(3.5px);
+  z-index: 5;
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Navbar styling - with subtle glow and transparent background */
+.navbar {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  position: fixed;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0); /* Slightly visible background */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-}
-
-h1 {
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-nav {
-  display: flex;
-  gap: 1rem;
-}
-
-.tab-link {
-  background: none;
-  border: none;
-  color: #f4c430;
-  cursor: pointer;
-  font-size: 1rem;
-  padding-bottom: 0.5rem;
-}
-
-.tab-link.active {
-  border-bottom: 2px solid #f4c430;
-  text-shadow: 0 0 5px #f4c430;
-}
-
-.tab-content {
-  display: none;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-h2 {
-  font-size: 1.2rem;
-  margin-top: 0;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input,
-select,
-textarea,
-button {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  background-color: #1a1a1a;
-  border: 1px solid #f4c430;
-  color: #f4c430;
-  border-radius: 5px;
+  padding: 0 25px;
   box-sizing: border-box;
+  z-index: 10;
+  max-width: 96%;
+  margin-left: 2%;
+  margin-right: 2%;
+  border-radius: 8px; /* Rounded corners */
 }
 
-.password-wrapper {
-  position: relative;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #f4c430;
+.navbar-brand {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Antikor Mono", Courier, monospace;
+  color: rgba(220, 160, 80, 0.85); /* Warmer orange */
+  text-shadow: 0 0 8px rgba(220, 160, 80, 0.3); /* Softer glow */
+  letter-spacing: 1px;
+  background-color: transparent;
   cursor: pointer;
-}
-
-.button-group {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-.output-wrapper {
+  transition: all 0.4s ease;
+  padding: 8px 15px;
+  border-radius: 7px;
+  opacity: 0;
   position: relative;
+  overflow: hidden;
 }
 
-.copy-button,
-.download-button {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: auto;
-    padding: 0.5rem 1rem;
+.navbar-brand:hover {
+  text-shadow: 0 0 12px rgba(220, 160, 80, 0.5);
+  transform: translateY(-1px);
 }
 
-.upload-button {
-    text-align: center;
+.navbar-brand::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0%;
+  height: 1px;
+  background-color: rgba(220, 160, 80, 0.6);
+  transition: width 0.4s ease;
 }
 
-/* Responsive Styles */
-@media (min-width: 768px) {
-  .button-group {
-    grid-template-columns: repeat(3, 1fr);
+.navbar-brand:hover::after {
+  width: 80%;
+}
+
+.navbar-tools {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  display: flex;
+  gap: 20px; /* Increased from 15px */
+}
+
+.tool-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  font-family: "Antikor Mono", Courier, monospace;
+  background-color: rgba(
+    20,
+    15,
+    10,
+    0.35
+  ); /* Slightly darker background */
+  color: rgba(220, 160, 80, 0.8); /* Warmer, softer text */
+  border: 1px solid rgba(180, 120, 60, 0.25); /* More subtle border */
+  border-radius: 7px; /* More rounded */
+  padding: 10px 18px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-shadow: 0 0 5px rgba(220, 160, 80, 0.2);
+  opacity: 0;
+  transform: translateY(10px);
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add hover effects for navbar buttons */
+.tool-button:hover {
+  background-color: rgba(35, 25, 15, 0.5);
+  border-color: rgba(220, 160, 80, 0.4);
+  color: rgba(240, 180, 100, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.tool-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.1s ease;
+}
+
+/* Add subtle glow effect on hover */
+.tool-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(220, 160, 80, 0.15),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.tool-button:hover::after {
+  opacity: 1;
+}
+
+/* Smoother, calming terminal styling */
+.terminal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 840px;
+  height: 520px;
+  background-color: rgba(
+    10,
+    10,
+    12,
+    0.85
+  ); /* Slightly darker, softer background */
+  border-radius: 14px; /* More rounded corners for softer feel */
+  border: 1px solid rgba(180, 120, 60, 0.2); /* Softer border color */
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(180, 120, 60, 0.12);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  backdrop-filter: blur(8px);
+}
+
+.terminal-header {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  height: 38px;
+  background-color: rgba(15, 15, 18, 0.75); /* More transparent header */
+  border-bottom: 1px solid rgba(180, 120, 60, 0.15);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  user-select: none;
+}
+
+.terminal-buttons {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  display: flex;
+  gap: 10px;
+}
+
+.terminal-btn {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.terminal-btn.close {
+  background-color: rgba(255, 69, 0, 0.65);
+}
+
+.terminal-btn.minimize {
+  background-color: rgba(255, 165, 0, 0.65);
+}
+
+.terminal-btn.maximize {
+  background-color: rgba(50, 205, 50, 0.65);
+}
+
+.terminal-btn:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.terminal-title {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  flex-grow: 1;
+  text-align: center;
+  font-family: "Antikor Mono", Courier, monospace;
+  font-size: 15px;
+  color: rgba(220, 160, 80, 0.7); /* Warmer, softer orange */
+  letter-spacing: 1.2px;
+  text-shadow: 0 0 4px rgba(220, 160, 80, 0.15);
+}
+
+.terminal-body {
+  flex-grow: 1;
+  padding: 28px;
+  overflow-y: auto;
+  font-family: "Antikor Mono", Courier, monospace;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(8, 8, 10, 0.15),
+    rgba(12, 12, 15, 0.08)
+  );
+}
+
+.terminal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.terminal-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.terminal-label {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  min-width: 105px;
+  color: rgba(220, 160, 80, 0.65); /* Softer label color */
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  font-weight: 400;
+  text-shadow: 0 0 3px rgba(220, 160, 80, 0.08);
+}
+
+.terminal-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  background-color: rgba(25, 25, 25, 0.65);
+  border: 1px solid rgba(180, 120, 60, 0.25); /* Softer border */
+  color: rgba(220, 160, 80, 0.7); /* Warmer text */
+  padding: 9px 18px;
+  border-radius: 7px; /* More rounded */
+  font-family: "Antikor Mono", Courier, monospace;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 3px rgba(220, 160, 80, 0.12);
+}
+
+.terminal-button:hover {
+  background-color: rgba(35, 25, 15, 0.6);
+  border-color: rgba(220, 160, 80, 0.4);
+  color: rgba(240, 180, 100, 0.8);
+  text-shadow: 0 0 5px rgba(220, 160, 80, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* Softer input, textarea, and select styling */
+.terminal-input,
+.terminal-textarea,
+.terminal-select {
+  background-color: rgba(12, 12, 14, 0.25);
+  border: 1px solid rgba(180, 120, 60, 0.25);
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Antikor Mono", Courier, monospace;
+  font-size: 13px;
+  border-radius: 6px;
+  outline: none;
+  flex-grow: 1;
+  transition: all 0.3s ease;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+.terminal-input::placeholder,
+.terminal-textarea::placeholder,
+.terminal-select::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.terminal-input:focus,
+.terminal-textarea:focus,
+.terminal-select:focus {
+  border-color: rgba(220, 160, 80, 0.4);
+  box-shadow: 0 0 8px rgba(180, 120, 60, 0.2);
+  background-color: rgba(15, 15, 18, 0.35);
+}
+
+.terminal-select {
+  background-color: rgba(12, 12, 14, 0.25);
+  border: 1px solid rgba(180, 120, 60, 0.25);
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Antikor Mono", Courier, monospace;
+  font-size: 13px;
+  border-radius: 6px;
+  outline: none;
+  flex-grow: 1;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2214%22%20height%3D%2214%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22rgba%28220%2C%20160%2C%2080%2C%200.7%29%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+.terminal-select:focus {
+  border-color: rgba(220, 160, 80, 0.4);
+  box-shadow: 0 0 8px rgba(180, 120, 60, 0.2);
+  background-color: rgba(15, 15, 18, 0.35);
+}
+
+.terminal-select option {
+  background-color: rgba(15, 15, 18, 0.95);
+  color: rgba(220, 160, 80, 0.85);
+  padding: 8px;
+}
+
+/* Style for disabled options */
+.terminal-select option:disabled {
+  color: rgba(220, 160, 80, 0.4);
+  font-style: italic;
+}
+
+/* Ensure dropdown appearance is consistent across browsers */
+.terminal-select::-ms-expand {
+  display: none;
+}
+
+/* Special styling for Firefox */
+@-moz-document url-prefix() {
+  .terminal-select {
+    text-indent: 0.01px;
+    text-overflow: "";
+    padding-right: 40px;
   }
 }
 
-@media (max-width: 767px) {
-  nav {
+/* Output area with softer colors */
+.terminal-output {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  background-color: rgba(12, 12, 14, 0.3);
+  border: 1px solid rgba(180, 120, 60, 0.2);
+  padding: 14px;
+  width: 100%;
+  min-height: 100px;
+  max-height: 200px;
+  overflow-y: auto;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: monospace;
+  border-radius: 6px;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  word-break: break-all;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  line-height: 1.5;
+}
+
+.terminal-output#output-text,
+.terminal-output#file-output-text,
+.terminal-output#hash-output {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* Password toggle with softer styling */
+.password-wrapper {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+}
+
+.password-toggle {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 140, 0, 0.5);
+  font-size: 14px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: rgba(255, 165, 0, 0.7);
+  opacity: 0.9;
+  text-shadow: 0 0 5px rgba(255, 140, 0, 0.2);
+}
+
+/* Add this to remove all scrollbars on the page */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Make the copy button not transform on hover */
+#copy-btn {
+  transform: none !important;
+}
+#copy-btn:hover {
+  transform: none !important;
+}
+
+/* Add user-select: none to all interface elements */
+.navbar,
+.navbar-brand,
+.navbar-tools,
+.tool-button,
+.terminal-header,
+.terminal-btn,
+.terminal-buttons,
+.terminal-title,
+.terminal-label,
+.terminal-button,
+.blur-layer,
+.terminal-output,
+.password-toggle,
+.status-text,
+.progress-bar-container,
+.progress-bar-fill {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Terminal input elements should remain selectable for user interaction */
+.terminal-input,
+.terminal-textarea,
+.terminal-select,
+.terminal-output#output-text,
+.terminal-output#file-output-text,
+.terminal-output#hash-output {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* Mobile Responsive Design */
+@media screen and (max-width: 768px) {
+  /* Adjust binary matrix for mobile performance */
+  .binary-overlay {
+    font-size: 12px;
+    filter: blur(0.3px);
+  }
+  
+  .binary-bit {
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+  }
+
+  /* Mobile navbar adjustments - ensure it stays visible */
+  .navbar {
+    top: 10px;
+    padding: 10px 15px;
+    max-width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    z-index: 200; /* Increase z-index to ensure it stays above terminal */
     flex-direction: column;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+  }
+
+  .navbar-brand {
+    font-size: 16px;
+    padding: 6px 12px;
+    margin-bottom: 8px;
+  }
+
+  .navbar-tools {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tool-button {
+    padding: 8px 12px;
+    font-size: 11px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Mobile terminal container - adjusted positioning */
+  .terminal-container {
+    width: 95%;
+    max-width: 95%;
+    height: 70vh; /* Reduced from 75vh */
+    max-height: 500px;
+    border-radius: 10px;
+    top: 50%; /* Adjusted to center better */
+    margin-top: 80px; /* Increased margin to create more space from navbar */
+  }
+
+  .terminal-header {
+    height: 35px;
+    padding: 0 12px;
+  }
+
+  .terminal-title {
+    font-size: 13px;
+    letter-spacing: 0.8px;
+  }
+
+  .terminal-btn {
+    width: 12px;
+    height: 12px;
+  }
+
+  .terminal-body {
+    padding: 15px 12px; /* Reduced padding */
+  }
+
+  .terminal-content {
+    gap: 12px; /* Reduced gap */
+  }
+
+  /* Mobile terminal rows - stack vertically */
+  .terminal-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .terminal-row.output-area {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .terminal-label {
+    min-width: auto;
+    font-size: 13px; /* Slightly increased font size */
+    letter-spacing: 0.5px;
+    width: 100%; /* Full width for better alignment */
+    margin-bottom: 4px; /* Increased margin */
+  }
+
+  /* Mobile input styling */
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    width: 100%;
+    padding: 14px 12px; /* Increased padding for better touch targets */
+    font-size: 16px; /* Increased for better readability on mobile */
+    border-radius: 8px;
+    box-sizing: border-box;
+    margin-bottom: 8px; /* Increased spacing between elements */
+    min-height: 48px; /* Minimum height for better touch targets */
+  }
+
+  .terminal-textarea {
+    min-height: 80px; /* Reduced height */
+    resize: vertical;
+    padding: 12px; /* Consistent padding */
+  }
+
+  .password-wrapper {
+    width: 100%;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .password-toggle {
+    right: 12px;
+    width: 36px; /* Larger touch target */
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile terminal buttons */
+  .terminal-button {
+    padding: 14px 16px; /* Increased padding for better touch targets */
+    font-size: 16px; /* Increased font size for better readability */
+    border-radius: 10px; /* More rounded for modern look */
+    letter-spacing: 0.5px;
+    width: 100%;
+    margin-bottom: 12px; /* Increased margin for better spacing */
+    min-height: 50px; /* Increased minimum height for touch targets */
+  }
+
+  /* Mobile button rows */
+  .terminal-row:has(.terminal-button) {
+    flex-direction: column;
+    width: 100%;
+    gap: 14px; /* Increased gap */
+    margin-top: 10px; /* Add top margin */
+    margin-bottom: 10px; /* Add bottom margin */
+  }
+
+  .terminal-row:has(.terminal-button) .terminal-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Special handling for file encryption browse button */
+  .terminal-row:has(#browse-btn),
+  .terminal-row:has(#browse-dict-btn) {
+    flex-direction: column; /* Changed to column for better mobile layout */
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .terminal-row:has(#browse-btn) #browse-btn,
+  .terminal-row:has(#browse-dict-btn) #browse-dict-btn {
+    width: 100%; /* Full width for better touch target */
+    margin-left: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 14px 16px;
+    min-height: 50px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+
+  /* Mobile output area */
+  .terminal-output {
+    width: 100%;
+    min-height: 100px; /* Increased for better visibility */
+    max-height: 200px; /* Increased for better content visibility */
+    padding: 15px; /* Increased padding */
+    font-size: 16px; /* Increased for better readability */
+    line-height: 1.5;
+    box-sizing: border-box;
+    margin-top: 5px;
+  }
+
+  /* Mobile copy button */
+  #copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    min-height: 30px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
+    background-color: rgba(25, 25, 25, 0.8);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    color: rgba(220, 160, 80, 0.9);
+  }
+
+  /* Mobile select wrapper */
+  .terminal-select-wrapper {
+    width: 100%;
+  }
+
+  .terminal-select {
+    width: 100%;
+    padding-right: 35px;
+  }
+
+  /* Mobile hash reverse specific adjustments */
+  #hash-output {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  /* Mobile file download button */
+  #file-download-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+  }
+
+  /* Touch-friendly adjustments */
+  .terminal-button:hover {
+    transform: none; /* Remove hover transforms on mobile */
+  }
+
+  .tool-button:hover {
+    transform: none;
+  }
+
+  /* Optimize performance on mobile */
+  .binary-overlay {
+    will-change: auto;
+  }
+
+  /* Ensure proper touch scrolling */
+  .terminal-body {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  .terminal-output {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Extra small screens (phones in portrait) */
+@media screen and (max-width: 480px) {
+  .navbar {
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 15px 20px;
+    z-index: 200;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid rgba(180, 120, 60, 0.2);
+    position: fixed;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .navbar-brand {
+    font-size: 24px;
+    padding: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    text-align: center;
+    width: 100%;
+    opacity: 1;
+  }
+
+  .navbar-tools {
+    display: none; /* Hide the tools in header */
+  }
+
+  .tool-button {
+    padding: 16px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    min-height: 60px;
+    border-radius: 10px;
+    letter-spacing: 0.8px;
+    margin-bottom: 15px;
+    opacity: 1;
+    transform: none;
+  }
+
+  .terminal-container {
+    width: 100%;
+    height: 100vh;
+    max-height: none;
+    top: 0;
+    left: 0;
+    margin: 0;
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding-top: 60px; /* Space for the navbar */
+    box-sizing: border-box;
+  }
+
+  .terminal-header {
+    height: 50px;
+    padding: 0 15px;
+    border-radius: 0;
+    background-color: rgba(15, 15, 18, 0.9);
+    border-bottom: 1px solid rgba(180, 120, 60, 0.25);
+  }
+
+  .terminal-title {
+    font-size: 16px;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+    color: rgba(220, 160, 80, 0.9);
+  }
+
+  .terminal-btn {
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    opacity: 0.8;
+  }
+
+  .terminal-body {
+    padding: 20px;
+    border-radius: 0;
+    background-color: rgba(10, 10, 12, 0.95);
+    height: calc(100vh - 50px); /* Full height minus header */
+    box-sizing: border-box;
+  }
+
+  .terminal-content {
+    gap: 25px;
+    padding-bottom: 30px;
+  }
+
+  .terminal-label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: rgba(220, 160, 80, 0.9);
+  }
+
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    padding: 15px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    min-height: 50px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
+    background-color: rgba(20, 20, 25, 0.6);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .terminal-button {
+    padding: 14px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    min-height: 50px;
+    border-radius: 8px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background-color: rgba(25, 25, 25, 0.8);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    color: rgba(220, 160, 80, 0.9);
+    width: 100%;
+  }
+
+  .terminal-output {
+    min-height: 100px;
+    max-height: 150px;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
+    background-color: rgba(20, 20, 25, 0.6);
+    border: 1px solid rgba(180, 120, 60, 0.3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .terminal-textarea {
+    min-height: 100px;
+    line-height: 1.5;
+  }
+
+  /* Reduce binary matrix density on very small screens */
+  .binary-overlay {
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  .binary-bit {
+    width: 14px;
+    height: 14px;
+    margin: 1px;
+  }
+  
+  /* Improve focus states for accessibility */
+  .terminal-input:focus,
+  .terminal-textarea:focus,
+  .terminal-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2) inset;
+  }
+  
+  /* Improve placeholder text */
+  .terminal-input::placeholder,
+  .terminal-textarea::placeholder {
+    opacity: 0.6;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  /* Adjust navbar for landscape */
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+    padding: 12px 16px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+  }
+
+  .navbar-brand {
+    margin-bottom: 0;
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+
+  .navbar-tools {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  /* Adjust terminal for landscape */
+  .terminal-container {
+    height: 78vh;
+    max-height: 380px;
+    top: 50%;
+    margin-top: 55px;
+    border-radius: 14px;
+  }
+
+  .terminal-header {
+    height: 38px;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .terminal-body {
+    padding: 16px;
+    border-radius: 0 0 14px 14px;
+  }
+
+  /* Optimize for horizontal space in landscape */
+  .terminal-row {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 12px;
+  }
+  
+  .terminal-label {
+    min-width: 110px;
+    width: auto;
+    margin-bottom: 0;
+    font-size: 15px;
+    letter-spacing: 0.8px;
+  }
+  
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    min-height: 52px;
+    padding: 14px;
+    font-size: 16px;
+  }
+  
+  .terminal-output {
+    max-height: 160px;
+    min-height: 90px;
+  }
+  
+  /* Keep button rows vertical in landscape for better usability */
+  .terminal-row:has(.terminal-button) {
+    flex-direction: column;
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .terminal-button {
+    min-height: 54px;
+    padding: 14px;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .terminal-textarea {
+    min-height: 70px;
+  }
+}
+
+/* High DPI displays */
+@media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+  .binary-overlay {
+    filter: blur(0.2px);
+  }
+  
+  /* Improve text rendering on high DPI screens */
+  body, .navbar, .terminal-title, .terminal-label, .terminal-input, .terminal-textarea, .terminal-select, .terminal-button, .terminal-output {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Optimize touch targets for high DPI screens */
+  .terminal-button, .tool-button, .password-toggle {
+    min-height: 56px;
+  }
+  
+  .terminal-container {
+    border-width: 0.5px;
+  }
+  
+  /* Sharper text for high DPI displays */
+  .terminal-label,
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select,
+  .terminal-button,
+  .terminal-output,
+  .navbar-brand,
+  .tool-button {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets for better usability */
+  .tool-button,
+  .terminal-button,
+  .terminal-btn,
+  .password-toggle {
+    min-height: 56px;
+    width: 44px;
+    right: 8px;
+  }
+  
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    min-height: 56px;
+  }
+  
+  /* Remove hover effects that might cause issues on touch devices */
+  .tool-button:hover,
+  .terminal-button:hover,
+  .navbar-brand:hover,
+  .terminal-btn:hover,
+  #copy-btn:hover {
+    transform: none;
+    opacity: 1;
+  }
+  
+  /* Ensure proper scrolling on touch devices */
+  .terminal-body,
+  .terminal-output,
+  .terminal-textarea {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  
+  /* Improve tap highlight color */
+  * {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* Improve button feedback on touch */
+  .terminal-button:active,
+  .tool-button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+    transition: transform 0.1s, opacity 0.1s;
+  }
+  
+  /* Improve scrolling experience */
+  .terminal-body,
+  .terminal-output,
+  .terminal-textarea {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Custom scrollbar styling */
+  .terminal-body::-webkit-scrollbar,
+  .terminal-output::-webkit-scrollbar,
+  .terminal-textarea::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .terminal-body::-webkit-scrollbar-thumb,
+  .terminal-output::-webkit-scrollbar-thumb,
+  .terminal-textarea::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
+  
+  .terminal-body::-webkit-scrollbar-track,
+  .terminal-output::-webkit-scrollbar-track,
+  .terminal-textarea::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.2);
   }
 }
