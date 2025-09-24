@@ -1,3 +1,29 @@
+/* CSS Custom Properties for Mobile-First Design */
+:root {
+  --primary-orange: rgba(220, 160, 80, 0.85);
+  --primary-orange-hover: rgba(240, 180, 100, 0.9);
+  --terminal-bg: rgba(10, 10, 12, 0.85);
+  --terminal-border: rgba(180, 120, 60, 0.2);
+  --input-bg: rgba(12, 12, 14, 0.25);
+  --button-bg: rgba(25, 25, 25, 0.65);
+  --text-primary: rgba(255, 255, 255, 0.8);
+  --text-secondary: rgba(220, 160, 80, 0.65);
+  
+  /* Mobile-first spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  
+  /* Mobile-first font sizes */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+}
+
 body,
 html {
   margin: 0;
@@ -6,6 +32,11 @@ html {
   width: 100%;
   background-color: #000;
   overflow: hidden;
+  /* Optimize for mobile scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Prevent text size adjust on orientation change */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 .wf-force-outline-none[tabindex="-1"]:focus {
@@ -589,6 +620,7 @@ body::-webkit-scrollbar {
   .binary-overlay {
     font-size: 12px;
     filter: blur(0.3px);
+    will-change: transform; /* Optimize for mobile performance */
   }
   
   .binary-bit {
@@ -597,18 +629,27 @@ body::-webkit-scrollbar {
     font-size: 12px;
   }
 
+  /* Prevent horizontal scrolling */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
   /* Mobile navbar adjustments - ensure it stays visible */
   .navbar {
-    top: 10px;
-    padding: 10px 15px;
-    max-width: 95%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
+    top: 5px;
+    padding: 12px 15px;
+    max-width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
     z-index: 200; /* Increase z-index to ensure it stays above terminal */
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: auto;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(180, 120, 60, 0.3);
   }
 
   .navbar-brand {
@@ -632,13 +673,14 @@ body::-webkit-scrollbar {
 
   /* Mobile terminal container - adjusted positioning */
   .terminal-container {
-    width: 95%;
-    max-width: 95%;
-    height: 70vh; /* Reduced from 75vh */
-    max-height: 500px;
-    border-radius: 10px;
-    top: 50%; /* Adjusted to center better */
-    margin-top: 80px; /* Increased margin to create more space from navbar */
+    width: 96%;
+    max-width: 96%;
+    height: 75vh;
+    max-height: 600px;
+    border-radius: 12px;
+    top: 52%;
+    margin-top: 90px; /* Space for enhanced navbar */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   }
 
   .terminal-header {
@@ -848,6 +890,35 @@ body::-webkit-scrollbar {
   }
 }
 
+/* Small mobile screens */
+@media screen and (max-width: 520px) {
+  .terminal-container {
+    width: 98%;
+    height: 80vh;
+    margin-top: 100px;
+    border-radius: 8px;
+  }
+  
+  .terminal-body {
+    padding: 16px;
+  }
+  
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    font-size: 16px; /* Prevent zoom on mobile */
+    padding: 16px 14px;
+    border-radius: 10px;
+  }
+  
+  .terminal-button {
+    font-size: 16px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    min-height: 56px;
+  }
+}
+
 /* Extra small screens (phones in portrait) */
 @media screen and (max-width: 480px) {
   .navbar {
@@ -859,10 +930,11 @@ body::-webkit-scrollbar {
     padding: 15px 20px;
     z-index: 200;
     border-radius: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    border-bottom: 1px solid rgba(180, 120, 60, 0.2);
+    background-color: rgba(0, 0, 0, 0.9);
+    border-bottom: 1px solid rgba(180, 120, 60, 0.3);
     position: fixed;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
   }
 
   .navbar-brand {
@@ -1001,14 +1073,27 @@ body::-webkit-scrollbar {
 
   /* Reduce binary matrix density on very small screens */
   .binary-overlay {
-    font-size: 11px;
-    opacity: 0.6;
+    font-size: 10px;
+    opacity: 0.5;
+    will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
   }
 
   .binary-bit {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     margin: 1px;
+  }
+  
+  /* Performance optimizations for very small screens */
+  .matrix-container {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  
+  .blur-layer {
+    backdrop-filter: blur(2px); /* Reduce blur for better performance */
+    opacity: 0.3;
   }
   
   /* Improve focus states for accessibility */
@@ -1024,6 +1109,31 @@ body::-webkit-scrollbar {
   .terminal-textarea::placeholder {
     opacity: 0.6;
     letter-spacing: 0.5px;
+  }
+}
+
+/* Tablet and medium screen adjustments */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .terminal-container {
+    width: 85%;
+    max-width: 700px;
+    height: 600px;
+  }
+  
+  .terminal-body {
+    padding: 24px;
+  }
+  
+  .navbar {
+    top: 15px;
+    max-width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
+  .tool-button {
+    padding: 12px 16px;
+    font-size: 14px;
   }
 }
 
@@ -1164,10 +1274,13 @@ body::-webkit-scrollbar {
   /* Increase touch targets for better usability */
   .tool-button,
   .terminal-button,
-  .terminal-btn,
+  .terminal-btn {
+    min-height: 56px;
+  }
+  
   .password-toggle {
     min-height: 56px;
-    width: 44px;
+    width: 56px;
     right: 8px;
   }
   
@@ -1175,6 +1288,7 @@ body::-webkit-scrollbar {
   .terminal-textarea,
   .terminal-select {
     min-height: 56px;
+    font-size: 16px; /* Prevent zoom on iOS */
   }
   
   /* Remove hover effects that might cause issues on touch devices */
@@ -1235,5 +1349,48 @@ body::-webkit-scrollbar {
   .terminal-output::-webkit-scrollbar-track,
   .terminal-textarea::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (prefers-reduced-motion: reduce) {
+  .binary-overlay,
+  .binary-bit,
+  .blur-layer {
+    animation: none;
+    transition: none;
+  }
+  
+  .terminal-button,
+  .tool-button,
+  .navbar-brand {
+    transition: none;
+  }
+}
+
+/* Dark mode support (already dark, but ensures consistency) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --terminal-bg: rgba(8, 8, 10, 0.9);
+    --input-bg: rgba(10, 10, 12, 0.3);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-orange: rgba(255, 180, 100, 1);
+    --terminal-border: rgba(200, 140, 80, 0.6);
+    --text-primary: rgba(255, 255, 255, 1);
+  }
+  
+  .terminal-input,
+  .terminal-textarea,
+  .terminal-select {
+    border-width: 2px;
+  }
+  
+  .terminal-button {
+    border-width: 2px;
   }
 }
