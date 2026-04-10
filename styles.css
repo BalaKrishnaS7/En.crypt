@@ -32,9 +32,7 @@ html {
   width: 100%;
   background-color: #000;
   overflow: hidden;
-  /* Optimize for mobile scrolling */
   -webkit-overflow-scrolling: touch;
-  /* Prevent text size adjust on orientation change */
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
@@ -99,7 +97,7 @@ html {
   -ms-user-select: none;
 }
 
-/* Navbar styling - with subtle glow and transparent background */
+/* Navbar styling */
 .navbar {
   user-select: none;
   -webkit-user-select: none;
@@ -110,7 +108,7 @@ html {
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: rgba(0, 0, 0, 0); /* Slightly visible background */
+  background-color: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -120,7 +118,7 @@ html {
   max-width: 96%;
   margin-left: 2%;
   margin-right: 2%;
-  border-radius: 8px; /* Rounded corners */
+  border-radius: 8px;
 }
 
 .navbar-brand {
@@ -131,8 +129,8 @@ html {
   font-size: 18px;
   font-weight: bold;
   font-family: "Antikor Mono", Courier, monospace;
-  color: rgba(220, 160, 80, 0.85); /* Warmer orange */
-  text-shadow: 0 0 8px rgba(220, 160, 80, 0.3); /* Softer glow */
+  color: rgba(220, 160, 80, 0.85);
+  text-shadow: 0 0 8px rgba(220, 160, 80, 0.3);
   letter-spacing: 1px;
   background-color: transparent;
   cursor: pointer;
@@ -171,7 +169,7 @@ html {
   -moz-user-select: none;
   -ms-user-select: none;
   display: flex;
-  gap: 20px; /* Increased from 15px */
+  gap: 20px;
 }
 
 .tool-button {
@@ -180,15 +178,10 @@ html {
   -moz-user-select: none;
   -ms-user-select: none;
   font-family: "Antikor Mono", Courier, monospace;
-  background-color: rgba(
-    20,
-    15,
-    10,
-    0.35
-  ); /* Slightly darker background */
-  color: rgba(220, 160, 80, 0.8); /* Warmer, softer text */
-  border: 1px solid rgba(180, 120, 60, 0.25); /* More subtle border */
-  border-radius: 7px; /* More rounded */
+  background-color: rgba(20, 15, 10, 0.35);
+  color: rgba(220, 160, 80, 0.8);
+  border: 1px solid rgba(180, 120, 60, 0.25);
+  border-radius: 7px;
   padding: 10px 18px;
   font-size: 13px;
   cursor: pointer;
@@ -201,7 +194,6 @@ html {
   overflow: hidden;
 }
 
-/* Add hover effects for navbar buttons */
 .tool-button:hover {
   background-color: rgba(35, 25, 15, 0.5);
   border-color: rgba(220, 160, 80, 0.4);
@@ -216,7 +208,6 @@ html {
   transition: all 0.1s ease;
 }
 
-/* Add subtle glow effect on hover */
 .tool-button::after {
   content: "";
   position: absolute;
@@ -237,7 +228,7 @@ html {
   opacity: 1;
 }
 
-/* Smoother, calming terminal styling */
+/* Terminal container */
 .terminal-container {
   position: fixed;
   top: 50%;
@@ -246,14 +237,9 @@ html {
   width: 80%;
   max-width: 840px;
   height: 520px;
-  background-color: rgba(
-    10,
-    10,
-    12,
-    0.85
-  ); /* Slightly darker, softer background */
-  border-radius: 14px; /* More rounded corners for softer feel */
-  border: 1px solid rgba(180, 120, 60, 0.2); /* Softer border color */
+  background-color: rgba(10, 10, 12, 0.85);
+  border-radius: 14px;
+  border: 1px solid rgba(180, 120, 60, 0.2);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5),
     0 0 15px rgba(180, 120, 60, 0.12);
   z-index: 100;
@@ -270,7 +256,7 @@ html {
   -moz-user-select: none;
   -ms-user-select: none;
   height: 38px;
-  background-color: rgba(15, 15, 18, 0.75); /* More transparent header */
+  background-color: rgba(15, 15, 18, 0.75);
   border-bottom: 1px solid rgba(180, 120, 60, 0.15);
   display: flex;
   align-items: center;
@@ -325,7 +311,7 @@ html {
   text-align: center;
   font-family: "Antikor Mono", Courier, monospace;
   font-size: 15px;
-  color: rgba(220, 160, 80, 0.7); /* Warmer, softer orange */
+  color: rgba(220, 160, 80, 0.7);
   letter-spacing: 1.2px;
   text-shadow: 0 0 4px rgba(220, 160, 80, 0.15);
 }
@@ -362,7 +348,7 @@ html {
   -moz-user-select: none;
   -ms-user-select: none;
   min-width: 105px;
-  color: rgba(220, 160, 80, 0.65); /* Softer label color */
+  color: rgba(220, 160, 80, 0.65);
   font-size: 14px;
   letter-spacing: 0.8px;
   font-weight: 400;
@@ -375,10 +361,10 @@ html {
   -moz-user-select: none;
   -ms-user-select: none;
   background-color: rgba(25, 25, 25, 0.65);
-  border: 1px solid rgba(180, 120, 60, 0.25); /* Softer border */
-  color: rgba(220, 160, 80, 0.7); /* Warmer text */
+  border: 1px solid rgba(180, 120, 60, 0.25);
+  color: rgba(220, 160, 80, 0.7);
   padding: 9px 18px;
-  border-radius: 7px; /* More rounded */
+  border-radius: 7px;
   font-family: "Antikor Mono", Courier, monospace;
   font-size: 13px;
   letter-spacing: 0.5px;
@@ -396,7 +382,7 @@ html {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-/* Softer input, textarea, and select styling */
+/* Input, textarea, select */
 .terminal-input,
 .terminal-textarea,
 .terminal-select {
@@ -466,18 +452,15 @@ html {
   padding: 8px;
 }
 
-/* Style for disabled options */
 .terminal-select option:disabled {
   color: rgba(220, 160, 80, 0.4);
   font-style: italic;
 }
 
-/* Ensure dropdown appearance is consistent across browsers */
 .terminal-select::-ms-expand {
   display: none;
 }
 
-/* Special styling for Firefox */
 @-moz-document url-prefix() {
   .terminal-select {
     text-indent: 0.01px;
@@ -486,7 +469,7 @@ html {
   }
 }
 
-/* Output area with softer colors */
+/* Output area */
 .terminal-output {
   user-select: none;
   -webkit-user-select: none;
@@ -519,7 +502,7 @@ html {
   -ms-user-select: text;
 }
 
-/* Password toggle with softer styling */
+/* Password toggle */
 .password-wrapper {
   position: relative;
   flex-grow: 1;
@@ -556,21 +539,21 @@ html {
   text-shadow: 0 0 5px rgba(255, 140, 0, 0.2);
 }
 
-/* Add this to remove all scrollbars on the page */
+/* Remove all scrollbars */
 html {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 html::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
 body::-webkit-scrollbar {
   display: none;
 }
 
-/* Make the copy button not transform on hover */
+/* Copy button — no transform */
 #copy-btn {
   transform: none !important;
 }
@@ -578,7 +561,7 @@ body::-webkit-scrollbar {
   transform: none !important;
 }
 
-/* Add user-select: none to all interface elements */
+/* user-select: none on all interface elements */
 .navbar,
 .navbar-brand,
 .navbar-tools,
@@ -601,7 +584,6 @@ body::-webkit-scrollbar {
   -ms-user-select: none;
 }
 
-/* Terminal input elements should remain selectable for user interaction */
 .terminal-input,
 .terminal-textarea,
 .terminal-select,
@@ -614,105 +596,126 @@ body::-webkit-scrollbar {
   -ms-user-select: text;
 }
 
-/* Mobile Responsive Design */
+/* ============================================================
+   MOBILE — 768px and below
+   ============================================================ */
 @media screen and (max-width: 768px) {
-  /* Adjust binary matrix for mobile performance */
+
+  /* Lighter binary matrix for performance */
   .binary-overlay {
     font-size: 12px;
     filter: blur(0.3px);
-    will-change: transform; /* Optimize for mobile performance */
+    will-change: transform;
   }
-  
+
   .binary-bit {
     width: 14px;
     height: 14px;
     font-size: 12px;
   }
 
-  /* Prevent horizontal scrolling */
   body, html {
     overflow-x: hidden;
     width: 100%;
   }
 
-  /* Mobile navbar adjustments - ensure it stays visible */
+  /* ── Navbar: compact horizontal strip ── */
   .navbar {
-    top: 5px;
-    padding: 12px 15px;
-    max-width: 96%;
-    margin-left: 2%;
-    margin-right: 2%;
-    z-index: 200; /* Increase z-index to ensure it stays above terminal */
-    flex-direction: column;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 16px;
+    height: 52px;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    height: auto;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(180, 120, 60, 0.3);
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.82);
+    border-bottom: 1px solid rgba(180, 120, 60, 0.25);
+    backdrop-filter: blur(12px);
+    z-index: 200;
   }
 
   .navbar-brand {
-    font-size: 16px;
-    padding: 6px 12px;
-    margin-bottom: 8px;
+    font-size: 15px;
+    padding: 6px 10px;
+    margin: 0;
+    border-radius: 6px;
+    opacity: 1; /* always visible on mobile */
   }
 
   .navbar-tools {
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 6px;
   }
 
   .tool-button {
-    padding: 8px 12px;
-    font-size: 11px;
+    padding: 7px 10px;
+    font-size: 10px;
     border-radius: 6px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
+    opacity: 1;
+    transform: none;
   }
 
-  /* Mobile terminal container - adjusted positioning */
+  /* ── Terminal: fills screen below the navbar ── */
   .terminal-container {
-    width: 96%;
-    max-width: 96%;
-    height: 75vh;
-    max-height: 600px;
-    border-radius: 12px;
-    top: 52%;
-    margin-top: 90px; /* Space for enhanced navbar */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    position: fixed;
+    top: 52px;          /* right below navbar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    height: auto;       /* fill remaining space */
+    transform: none;
+    border-radius: 0;
+    border-top: 1px solid rgba(180, 120, 60, 0.2);
+    box-shadow: none;
+    margin: 0;
   }
 
+  /* ── Header inside terminal ── */
   .terminal-header {
-    height: 35px;
-    padding: 0 12px;
+    height: 40px;
+    padding: 0 14px;
+    flex-shrink: 0;
+    border-radius: 0;
   }
 
   .terminal-title {
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: 0.8px;
   }
 
   .terminal-btn {
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
   }
 
+  /* ── Scrollable body ── */
   .terminal-body {
-    padding: 15px 12px; /* Reduced padding */
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 14px 24px;
   }
 
   .terminal-content {
-    gap: 12px; /* Reduced gap */
+    gap: 14px;
   }
 
-  /* Mobile terminal rows - stack vertically */
+  /* ── Rows: stack vertically ── */
   .terminal-row {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 8px;
     width: 100%;
-    margin-bottom: 5px;
   }
 
   .terminal-row.output-area {
@@ -722,576 +725,410 @@ body::-webkit-scrollbar {
 
   .terminal-label {
     min-width: auto;
-    font-size: 13px; /* Slightly increased font size */
+    width: 100%;
+    font-size: 12px;
     letter-spacing: 0.5px;
-    width: 100%; /* Full width for better alignment */
-    margin-bottom: 4px; /* Increased margin */
+    margin-bottom: 2px;
   }
 
-  /* Mobile input styling */
+  /* ── Inputs ── */
   .terminal-input,
   .terminal-textarea,
   .terminal-select {
     width: 100%;
-    padding: 14px 12px; /* Increased padding for better touch targets */
-    font-size: 16px; /* Increased for better readability on mobile */
-    border-radius: 8px;
     box-sizing: border-box;
-    margin-bottom: 8px; /* Increased spacing between elements */
-    min-height: 48px; /* Minimum height for better touch targets */
+    padding: 12px 14px;
+    font-size: 16px; /* prevents iOS zoom */
+    border-radius: 7px;
+    min-height: 44px;
+    margin: 0;
   }
 
   .terminal-textarea {
-    min-height: 80px; /* Reduced height */
+    min-height: 72px;
     resize: vertical;
-    padding: 12px; /* Consistent padding */
   }
 
   .password-wrapper {
     width: 100%;
-    margin-bottom: 8px;
-    position: relative;
   }
 
   .password-toggle {
     right: 12px;
-    width: 36px; /* Larger touch target */
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 32px;
+    height: 32px;
   }
 
-  /* Mobile terminal buttons */
-  .terminal-button {
-    padding: 14px 16px; /* Increased padding for better touch targets */
-    font-size: 16px; /* Increased font size for better readability */
-    border-radius: 10px; /* More rounded for modern look */
-    letter-spacing: 0.5px;
-    width: 100%;
-    margin-bottom: 12px; /* Increased margin for better spacing */
-    min-height: 50px; /* Increased minimum height for touch targets */
-  }
-
-  /* Mobile button rows */
+  /* ── Action buttons: side-by-side in a row ── */
   .terminal-row:has(.terminal-button) {
-    flex-direction: column;
-    width: 100%;
-    gap: 14px; /* Increased gap */
-    margin-top: 10px; /* Add top margin */
-    margin-bottom: 10px; /* Add bottom margin */
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .terminal-row:has(.terminal-button) .terminal-button {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 80px;
+    width: auto;
+    margin: 0;
+    padding: 12px 10px;
+    font-size: 13px;
+    min-height: 44px;
+    border-radius: 8px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
   }
 
-  /* Special handling for file encryption browse button */
+  /* ── Browse / file row ── */
   .terminal-row:has(#browse-btn),
   .terminal-row:has(#browse-dict-btn) {
-    flex-direction: column; /* Changed to column for better mobile layout */
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     width: 100%;
-    margin-bottom: 15px;
+  }
+
+  .terminal-row:has(#browse-btn) > div,
+  .terminal-row:has(#browse-dict-btn) > div {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    align-items: center;
   }
 
   .terminal-row:has(#browse-btn) #browse-btn,
   .terminal-row:has(#browse-dict-btn) #browse-dict-btn {
-    width: 100%; /* Full width for better touch target */
-    margin-left: 0;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 14px 16px;
-    min-height: 50px;
-    font-size: 16px;
-    border-radius: 10px;
+    flex-shrink: 0;
+    width: auto;
+    min-width: 80px;
+    padding: 12px 12px;
+    font-size: 12px;
+    min-height: 44px;
+    border-radius: 8px;
+    margin: 0;
   }
 
-  /* Mobile output area */
+  /* ── Output area ── */
   .terminal-output {
     width: 100%;
-    min-height: 100px; /* Increased for better visibility */
-    max-height: 200px; /* Increased for better content visibility */
-    padding: 15px; /* Increased padding */
-    font-size: 16px; /* Increased for better readability */
-    line-height: 1.5;
     box-sizing: border-box;
-    margin-top: 5px;
+    min-height: 90px;
+    max-height: 180px;
+    padding: 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* Mobile copy button */
+  /* ── Copy button ── */
   #copy-btn {
     position: absolute;
     top: 6px;
     right: 6px;
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-    min-height: 30px;
-    min-width: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    letter-spacing: 0.5px;
-    background-color: rgba(25, 25, 25, 0.8);
-    border: 1px solid rgba(180, 120, 60, 0.3);
-    color: rgba(220, 160, 80, 0.9);
+    padding: 5px 9px;
+    font-size: 11px;
+    border-radius: 5px;
+    min-height: auto;
+    min-width: auto;
+    width: auto;
+    flex: none;
   }
 
-  /* Mobile select wrapper */
+  /* ── Download button ── */
+  #file-download-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    font-size: 13px;
+    min-height: 44px;
+  }
+
+  /* Disable hover transforms */
+  .terminal-button:hover,
+  .tool-button:hover {
+    transform: none;
+  }
+
+  /* Select wrapper */
   .terminal-select-wrapper {
     width: 100%;
   }
 
   .terminal-select {
     width: 100%;
-    padding-right: 35px;
+    padding-right: 36px;
   }
 
-  /* Mobile hash reverse specific adjustments */
+  /* Hash output — more compact text */
   #hash-output {
-    font-size: 10px;
-    line-height: 1.2;
-  }
-
-  /* Mobile file download button */
-  #file-download-btn {
-    width: 100%;
-    margin-top: 8px;
-    padding: 10px;
-  }
-
-  /* Touch-friendly adjustments */
-  .terminal-button:hover {
-    transform: none; /* Remove hover transforms on mobile */
-  }
-
-  .tool-button:hover {
-    transform: none;
-  }
-
-  /* Optimize performance on mobile */
-  .binary-overlay {
-    will-change: auto;
-  }
-
-  /* Ensure proper touch scrolling */
-  .terminal-body {
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
-  }
-
-  .terminal-output {
-    -webkit-overflow-scrolling: touch;
+    font-size: 11px;
+    line-height: 1.3;
   }
 }
 
-/* Small mobile screens */
-@media screen and (max-width: 520px) {
-  .terminal-container {
-    width: 98%;
-    height: 80vh;
-    margin-top: 100px;
-    border-radius: 8px;
-  }
-  
-  .terminal-body {
-    padding: 16px;
-  }
-  
-  .terminal-input,
-  .terminal-textarea,
-  .terminal-select {
-    font-size: 16px; /* Prevent zoom on mobile */
-    padding: 16px 14px;
-    border-radius: 10px;
-  }
-  
-  .terminal-button {
-    font-size: 16px;
-    padding: 16px 20px;
-    border-radius: 12px;
-    min-height: 56px;
-  }
-}
-
-/* Extra small screens (phones in portrait) */
+/* ============================================================
+   EXTRA SMALL — 480px and below (adds on top of 768px rules)
+   ============================================================ */
 @media screen and (max-width: 480px) {
+
+  /* Navbar: same style, just tighter */
   .navbar {
-    top: 0;
-    left: 0;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 15px 20px;
-    z-index: 200;
-    border-radius: 0;
-    background-color: rgba(0, 0, 0, 0.9);
-    border-bottom: 1px solid rgba(180, 120, 60, 0.3);
-    position: fixed;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(12px);
+    height: 48px;
+    padding: 0 12px;
   }
 
   .navbar-brand {
-    font-size: 24px;
-    padding: 0;
-    margin-bottom: 0;
-    border-radius: 0;
-    text-align: center;
-    width: 100%;
-    opacity: 1;
-  }
-
-  .navbar-tools {
-    display: none; /* Hide the tools in header */
+    font-size: 14px;
+    padding: 5px 8px;
   }
 
   .tool-button {
-    padding: 16px;
-    font-size: 16px;
-    width: 100%;
-    max-width: 100%;
-    text-align: center;
-    min-height: 60px;
-    border-radius: 10px;
-    letter-spacing: 0.8px;
-    margin-bottom: 15px;
-    opacity: 1;
-    transform: none;
+    padding: 6px 8px;
+    font-size: 9px;
+    letter-spacing: 0;
   }
 
+  /* Terminal starts right under navbar */
   .terminal-container {
-    width: 100%;
-    height: 100vh;
-    max-height: none;
-    top: 0;
-    left: 0;
-    margin: 0;
-    transform: none;
-    border-radius: 0;
-    box-shadow: none;
-    padding-top: 60px; /* Space for the navbar */
-    box-sizing: border-box;
+    top: 48px;
   }
 
   .terminal-header {
-    height: 50px;
-    padding: 0 15px;
-    border-radius: 0;
-    background-color: rgba(15, 15, 18, 0.9);
-    border-bottom: 1px solid rgba(180, 120, 60, 0.25);
+    height: 38px;
+    padding: 0 12px;
   }
 
   .terminal-title {
-    font-size: 16px;
-    letter-spacing: 1.2px;
-    font-weight: 600;
-    color: rgba(220, 160, 80, 0.9);
-  }
-
-  .terminal-btn {
-    width: 12px;
-    height: 12px;
-    margin-right: 8px;
-    opacity: 0.8;
+    font-size: 11px;
   }
 
   .terminal-body {
-    padding: 20px;
-    border-radius: 0;
-    background-color: rgba(10, 10, 12, 0.95);
-    height: calc(100vh - 50px); /* Full height minus header */
-    box-sizing: border-box;
+    padding: 12px 12px 20px;
   }
 
   .terminal-content {
-    gap: 25px;
-    padding-bottom: 30px;
+    gap: 12px;
   }
 
   .terminal-label {
-    font-size: 16px;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
-    font-weight: 600;
-    color: rgba(220, 160, 80, 0.9);
+    font-size: 11px;
   }
 
   .terminal-input,
   .terminal-textarea,
   .terminal-select {
-    padding: 15px;
     font-size: 16px;
-    margin-bottom: 10px;
-    min-height: 50px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
-    background-color: rgba(20, 20, 25, 0.6);
-    border: 1px solid rgba(180, 120, 60, 0.3);
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .terminal-button {
-    padding: 14px;
-    font-size: 16px;
-    margin-bottom: 10px;
-    min-height: 50px;
-    border-radius: 8px;
-    letter-spacing: 1px;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    background-color: rgba(25, 25, 25, 0.8);
-    border: 1px solid rgba(180, 120, 60, 0.3);
-    color: rgba(220, 160, 80, 0.9);
-    width: 100%;
-  }
-
-  .terminal-output {
-    min-height: 100px;
-    max-height: 150px;
-    padding: 15px;
-    font-size: 16px;
-    line-height: 1.5;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) inset;
-    background-color: rgba(20, 20, 25, 0.6);
-    border: 1px solid rgba(180, 120, 60, 0.3);
-    width: 100%;
-    box-sizing: border-box;
+    padding: 11px 12px;
+    min-height: 42px;
   }
 
   .terminal-textarea {
-    min-height: 100px;
-    line-height: 1.5;
+    min-height: 64px;
   }
 
-  /* Reduce binary matrix density on very small screens */
+  .terminal-row:has(.terminal-button) .terminal-button {
+    padding: 11px 8px;
+    font-size: 12px;
+    min-height: 42px;
+  }
+
+  .terminal-output {
+    min-height: 80px;
+    max-height: 150px;
+    font-size: 11px;
+    padding: 10px;
+  }
+
+  /* Lighter blur for performance */
+  .blur-layer {
+    backdrop-filter: blur(2px);
+    opacity: 0.2;
+  }
+
   .binary-overlay {
     font-size: 10px;
-    opacity: 0.5;
     will-change: transform;
-    transform: translateZ(0); /* Force hardware acceleration */
+    transform: translateZ(0);
   }
 
   .binary-bit {
     width: 12px;
     height: 12px;
-    margin: 1px;
   }
-  
-  /* Performance optimizations for very small screens */
+
   .matrix-container {
     will-change: transform;
     transform: translateZ(0);
   }
-  
-  .blur-layer {
-    backdrop-filter: blur(2px); /* Reduce blur for better performance */
-    opacity: 0.3;
-  }
-  
-  /* Improve focus states for accessibility */
-  .terminal-input:focus,
-  .terminal-textarea:focus,
-  .terminal-select:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2) inset;
-  }
-  
-  /* Improve placeholder text */
-  .terminal-input::placeholder,
-  .terminal-textarea::placeholder {
-    opacity: 0.6;
-    letter-spacing: 0.5px;
-  }
 }
 
-/* Tablet and medium screen adjustments */
+/* ============================================================
+   TABLET — 769px to 1024px
+   ============================================================ */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
   .terminal-container {
     width: 85%;
     max-width: 700px;
     height: 600px;
   }
-  
+
   .terminal-body {
     padding: 24px;
   }
-  
+
   .navbar {
     top: 15px;
     max-width: 90%;
     margin-left: 5%;
     margin-right: 5%;
   }
-  
+
   .tool-button {
     padding: 12px 16px;
     font-size: 14px;
   }
 }
 
-/* Landscape orientation adjustments */
+/* ============================================================
+   LANDSCAPE MOBILE — ≤768px landscape
+   ============================================================ */
 @media screen and (max-width: 768px) and (orientation: landscape) {
-  /* Adjust navbar for landscape */
+
   .navbar {
+    height: 44px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: auto;
-    padding: 12px 16px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    border-radius: 12px;
+    padding: 0 14px;
   }
 
   .navbar-brand {
-    margin-bottom: 0;
-    font-size: 16px;
-    padding: 6px 12px;
+    margin: 0;
+    font-size: 14px;
   }
 
   .navbar-tools {
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 10px;
+    flex-wrap: nowrap;
+    gap: 6px;
   }
 
-  /* Adjust terminal for landscape */
+  .tool-button {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+
   .terminal-container {
-    height: 78vh;
-    max-height: 380px;
-    top: 50%;
-    margin-top: 55px;
-    border-radius: 14px;
+    top: 44px;
   }
 
   .terminal-header {
-    height: 38px;
-    border-radius: 14px 14px 0 0;
+    height: 34px;
   }
 
   .terminal-body {
-    padding: 16px;
-    border-radius: 0 0 14px 14px;
+    padding: 10px 14px 16px;
+    overflow-y: auto;
   }
 
-  /* Optimize for horizontal space in landscape */
+  .terminal-content {
+    gap: 10px;
+  }
+
+  /* In landscape, allow side-by-side label+input again when there's room */
   .terminal-row {
     flex-direction: row;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 12px;
+    align-items: center;
+    gap: 10px;
   }
-  
+
   .terminal-label {
-    min-width: 110px;
+    min-width: 90px;
     width: auto;
-    margin-bottom: 0;
-    font-size: 15px;
-    letter-spacing: 0.8px;
+    flex-shrink: 0;
+    margin: 0;
   }
-  
+
   .terminal-input,
   .terminal-textarea,
   .terminal-select {
-    min-height: 52px;
-    padding: 14px;
-    font-size: 16px;
-  }
-  
-  .terminal-output {
-    max-height: 160px;
-    min-height: 90px;
-  }
-  
-  /* Keep button rows vertical in landscape for better usability */
-  .terminal-row:has(.terminal-button) {
-    flex-direction: column;
-    width: 100%;
-    max-width: 220px;
-    margin: 0 auto;
-  }
-
-  .terminal-button {
-    min-height: 54px;
-    padding: 14px;
-    font-size: 16px;
-    margin-bottom: 12px;
+    flex: 1;
+    min-height: 40px;
+    font-size: 14px;
+    padding: 10px 12px;
   }
 
   .terminal-textarea {
+    min-height: 56px;
+  }
+
+  .terminal-row:has(.terminal-button) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  .terminal-row:has(.terminal-button) .terminal-button {
+    flex: 1 1 auto;
+    min-height: 40px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .terminal-output {
+    max-height: 120px;
     min-height: 70px;
+    font-size: 11px;
   }
 }
 
-/* High DPI displays */
+/* ============================================================
+   HIGH-DPI MOBILE
+   ============================================================ */
 @media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
   .binary-overlay {
     filter: blur(0.2px);
   }
-  
-  /* Improve text rendering on high DPI screens */
-  body, .navbar, .terminal-title, .terminal-label, .terminal-input, .terminal-textarea, .terminal-select, .terminal-button, .terminal-output {
+
+  body, .navbar, .terminal-title, .terminal-label,
+  .terminal-input, .terminal-textarea, .terminal-select,
+  .terminal-button, .terminal-output {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
-  
-  /* Optimize touch targets for high DPI screens */
-  .terminal-button, .tool-button, .password-toggle {
-    min-height: 56px;
-  }
-  
+
   .terminal-container {
     border-width: 0.5px;
   }
-  
-  /* Sharper text for high DPI displays */
-  .terminal-label,
-  .terminal-input,
-  .terminal-textarea,
-  .terminal-select,
-  .terminal-button,
-  .terminal-output,
-  .navbar-brand,
-  .tool-button {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
 }
 
-/* Touch device optimizations */
+/* ============================================================
+   TOUCH DEVICES
+   ============================================================ */
 @media (hover: none) and (pointer: coarse) {
-  /* Increase touch targets for better usability */
+
   .tool-button,
-  .terminal-button,
-  .terminal-btn {
-    min-height: 56px;
+  .terminal-button {
+    min-height: 44px;
   }
-  
+
   .password-toggle {
-    min-height: 56px;
-    width: 56px;
+    min-height: 44px;
+    width: 44px;
     right: 8px;
   }
-  
+
   .terminal-input,
   .terminal-textarea,
   .terminal-select {
-    min-height: 56px;
-    font-size: 16px; /* Prevent zoom on iOS */
+    min-height: 44px;
+    font-size: 16px;
   }
-  
-  /* Remove hover effects that might cause issues on touch devices */
+
+  /* Remove hover transforms */
   .tool-button:hover,
   .terminal-button:hover,
   .navbar-brand:hover,
@@ -1300,8 +1137,8 @@ body::-webkit-scrollbar {
     transform: none;
     opacity: 1;
   }
-  
-  /* Ensure proper scrolling on touch devices */
+
+  /* Touch scroll */
   .terminal-body,
   .terminal-output,
   .terminal-textarea {
@@ -1309,50 +1146,43 @@ body::-webkit-scrollbar {
     overflow-y: auto;
     scroll-behavior: smooth;
   }
-  
-  /* Improve tap highlight color */
-  * {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.15);
-  }
-  
-  /* Improve button feedback on touch */
+
+  /* Active feedback */
   .terminal-button:active,
   .tool-button:active {
-    transform: scale(0.98);
-    opacity: 0.9;
+    transform: scale(0.97);
+    opacity: 0.88;
     transition: transform 0.1s, opacity 0.1s;
   }
-  
-  /* Improve scrolling experience */
-  .terminal-body,
-  .terminal-output,
-  .terminal-textarea {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
+
+  * {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   }
-  
-  /* Custom scrollbar styling */
+
+  /* Thin scrollbars */
   .terminal-body::-webkit-scrollbar,
   .terminal-output::-webkit-scrollbar,
   .terminal-textarea::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
-  
+
   .terminal-body::-webkit-scrollbar-thumb,
   .terminal-output::-webkit-scrollbar-thumb,
   .terminal-textarea::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
   }
-  
+
   .terminal-body::-webkit-scrollbar-track,
   .terminal-output::-webkit-scrollbar-track,
   .terminal-textarea::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: transparent;
   }
 }
 
-/* Accessibility improvements for mobile */
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .binary-overlay,
   .binary-bit,
@@ -1360,7 +1190,7 @@ body::-webkit-scrollbar {
     animation: none;
     transition: none;
   }
-  
+
   .terminal-button,
   .tool-button,
   .navbar-brand {
@@ -1368,7 +1198,9 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Dark mode support (already dark, but ensures consistency) */
+/* ============================================================
+   DARK MODE (already dark, keeps consistency)
+   ============================================================ */
 @media (prefers-color-scheme: dark) {
   :root {
     --terminal-bg: rgba(8, 8, 10, 0.9);
@@ -1376,20 +1208,22 @@ body::-webkit-scrollbar {
   }
 }
 
-/* High contrast mode support */
+/* ============================================================
+   HIGH CONTRAST
+   ============================================================ */
 @media (prefers-contrast: high) {
   :root {
     --primary-orange: rgba(255, 180, 100, 1);
     --terminal-border: rgba(200, 140, 80, 0.6);
     --text-primary: rgba(255, 255, 255, 1);
   }
-  
+
   .terminal-input,
   .terminal-textarea,
   .terminal-select {
     border-width: 2px;
   }
-  
+
   .terminal-button {
     border-width: 2px;
   }
